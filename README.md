@@ -1,2 +1,2 @@
-# WebSysProject
+# Tux
 For The Group Project
