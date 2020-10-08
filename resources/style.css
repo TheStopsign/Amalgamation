@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Open Sans", sans-serif, serif;    
+}
+
+.title {
+    margin: 10px 10px 10px 25%;
+    width: 50%;
+    text-align: center;
+    font-weight: normal;
+}
+
+.formItem {
+    padding: 10px;
+    font-weight: normal;
+    width: 25%;
+}
+
+.formEntryBar {
+    width: 25%;
+    border: 1.5px black solid;
+    float: right;
+    font-weight: normal;
+}
+
+header {
+    height: 60px;
+    background-color: #262626;
+    font-family: "Agency FB", sans-serif, serif;
+}
+
+header h1 {
+    color: white;
+    height: 40px;
+    padding: 10px;
+    margin: 0;
+}
+
+.signUp {
+    height: 500px;
+    width: 50%;
+    border: 1.5px black solid;
+    margin: 30px 0 0 25% ;
+}
+
+footer {
+    height: 80px;
+    background-color: #262626;
+    font-family: "Agency FB", sans-serif, serif;
+    margin: 100px 0 0 0;
+}
