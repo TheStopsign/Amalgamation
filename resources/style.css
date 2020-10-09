@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Open Sans", sans-serif, serif;    
+}
+
+.mainTitle {
+    width: 100%;
+    margin-top: 15%;
+    font-family: "Agency FB", sans-serif, serif;
+    font-size: 5em;
+    text-align: center;
+}
+
+.button {
+    background-color: #262626;
+    padding: 10px;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    border: none;
+    width: 150px;    
+    font-size: 1.1em;
+}
+
+.button:hover {
+    background-color: #262626de;
+    cursor: pointer;
+}
+
+.loginButton {
+    margin-left: 35%;
+    float: left;
+}
+
+.signUpButton {
+    float: right;
+    margin-right: 35%;
+}
+
+.pageTitle {
+    margin: 5% 10px 10px 25%;
+    width: 50%;
+    text-align: center;
+    font-weight: normal;
+}
+
+.formItem {
+    padding: 10px;
+    font-weight: normal;
+    width: 40%;
+    float: left;
+}
+
+.formEntryBar {
+    width: 50%;
+    border: 1.5px black solid;
+    float: left;
+    font-weight: normal;
+    padding: 10px;
+}
+
+.submit {
+    float: right;
+}
+
+header {
+    height: 60px;
+    width: 100%;
+    top: 0;
+    background-color: #262626;
+    font-family: "Agency FB", sans-serif, serif;
+    position: absolute;
+}
+
+.headerTitle {
+    color: white;
+    height: 40px;
+    padding: 10px;
+    margin: 0;
+    cursor: pointer;
+    float: left;
+}
+
+.signUp {
+    height: 500px;
+    width: 50%;
+    border: 1.5px black solid;
+    margin: 30px 0 0 25% ;
+}
+
+footer {
+    height: 80px;
+    width: 100%;
+    background-color: #262626;
+    font-family: "Agency FB", sans-serif, serif;
+    color: white;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
+
+.teamTux {
+    padding: 24px 0 24px 10px;
+    float: left;    
+    margin: 0;
+}
+
+footer img {
+    float: right;
+    height: 60px;
+    cursor: pointer;
+    margin: 10px;
+}
