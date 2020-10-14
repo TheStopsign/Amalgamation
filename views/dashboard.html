@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <title>Dashboard</title>
+  <link href="style_dashboard.css" rel="stylesheet" />
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <header class="buttonbar">
+    <span class="menu">
+      <nav class="site-icon">Amalgamation</nav>
+      <nav class="menu-link">
+        <a href="./messages.html">Direct Messages</a>
+      </nav>
+      <nav class="menu-link"> Foobar </nav>
+      <nav class="menu-link">
+        <a href="./profile.html">Profile</a>
+      </nav>
+    </span>
+  </header>
+  <section class="colorbar"></section>
+  <br/>
+
+  
+
+  <div class="main-body">
+    <h1> Hello, User Foobar </h1>
+
+    <div class="custom-select" style="width:200px;">
+      <label for="Sort By">Sort By</label>
+      <select name="Sort By" id="sortby">
+        <option value="name_up">Name ↑</option>
+        <option value="name_down">Name ↓</option>
+        <option value="edited_up">Last Edited ↑</option>
+        <option value="edited_down">Last Edited ↓</option>
+      </select>
+    </div>
+    <br> 
+
+    <div class="display-window">
+      <h3 class="centered">Project 3</h3>
+      <ul>
+        <li>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </li>
+      </ul>
+
+      <button class="projectButton" onclick= "document.getElementById('myModal').style.display='block'" type="button">Share Settings</button>
+      <button class="projectButton" type="button">Download</button>
+    </div>
+
+    <div class="display-window">
+      <h3 class="centered">Project 2</h3>
+      <ul>
+        <li>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </li>
+      </ul>
+      <button class="projectButton" onclick= "document.getElementById('myModal').style.display='block'" type="button">Share Settings</button>
+    </div>
+    <div class="display-window">
+      <h3 class="centered">Project 1</h3>
+      <ul>
+        <li>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </li>
+      </ul>
+      <button class="projectButton" onclick= "document.getElementById('myModal').style.display='block'" type="button">Share Settings</button>
+    </div>
+  </div>
+
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <button onclick = "document.getElementById('myModal').style.display='none'" type="button" class = "close">X</button>
+      <p>Shared User 1</p>
+      <p>Shared User 2</p>
+      <p>Shared User 3</p>
+      <button onclick = "" type="button" class = "addUser">Add User</button>
+      <button onclick = "" type="button" class = "removeUser">Remove User</button>
+    </div>
+  
+  </div>
+
+  <footer>
+    <span class="dot">+</span>
+  </footer>
+
+</body>
+
+</html>
