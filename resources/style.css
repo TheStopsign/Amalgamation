@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
 
 * {
-  color: #686963;
+  color: whitesmoke;
 }
 
 body {
@@ -9,9 +9,10 @@ body {
   margin: 0;
   font-family: "Open Sans", sans-serif, serif;    
   background-color: #686963;
+  height: 100%;
 }
 
-.mainTitle {
+#mainTitle {
   width: 100%;
   margin-top: 15%;
   font-family: "Agency FB", sans-serif, serif;
@@ -20,8 +21,42 @@ body {
   color: white;
 }
 
+#loginButton {
+  margin-left: 35%;
+  float: left;
+}
+
+#signUpButton {
+  float: right;
+  margin-right: 35%;
+}
+
+#pageTitle {
+  margin: 5% 10px 10px 25%;
+  width: 50%;
+  text-align: center;
+  font-weight: normal;
+  color: #c4c4c4;
+}
+
+#headerTitle {
+  color: #686963;
+  height: 40px;
+  padding: 10px;
+  margin: 0;
+  cursor: pointer;
+  float: left;
+}
+
+#signUpLoginBox {
+  height: 500px;
+  width: 50%;
+  border: 1.5px #686963 solid;
+  margin: 30px 0 0 25% ;
+}
+
 .button {
-  background-color: rgba(0,0,0,0);
+  background-color: #00000000;
   padding: 10px;
   font-size: 16px;
   text-decoration: none;
@@ -36,33 +71,16 @@ body {
   cursor: pointer;
 }
 
-.loginButton {
-  margin-left: 35%;
-  float: left;
-}
-
-.signUpButton {
-  float: right;
-  margin-right: 35%;
-}
-
-.pageTitle {
-  margin: 5% 10px 10px 25%;
-  width: 50%;
-  text-align: center;
+.loginFormItem {
+  padding: 10px 0 10px 0;
   font-weight: normal;
-  color: #c4c4c4;
-}
-
-.formItem {
-  padding: 10px;
-  font-weight: normal;
-  width: 40%;
+  width: 100%;
   float: left;
   color: #c4c4c4;
+  margin: 0.5em 0 0.5em 0;
 }
 
-.formEntryBar {
+.loginFormEntryBox {
   width: 50%;
   border: 1.5px #686963 solid;
   float: left;
@@ -70,6 +88,27 @@ body {
   padding: 10px;
   color: #c4c4c4;
   border: 1px solid #c4c4c4;
+  display: block;
+}
+
+.signUpFormItem {
+  padding: 10px 0 10px 0;
+  font-weight: normal;
+  width: 40%;
+  float: left;
+  color: #c4c4c4;
+  margin: 0.5em 0 0.5em 0;
+}
+
+.signUpFormEntryBox {
+  width: 50%;
+  border: 1.5px #686963 solid;
+  float: left;
+  font-weight: normal;
+  padding: 10px;
+  color: #c4c4c4;
+  border: 1px solid #c4c4c4;
+  display: block;
 }
 
 .submit {
@@ -85,22 +124,6 @@ header {
   position: absolute;
 }
 
-.headerTitle {
-  color: #686963;
-  height: 40px;
-  padding: 10px;
-  margin: 0;
-  cursor: pointer;
-  float: left;
-}
-
-.signUp {
-  height: 500px;
-  width: 50%;
-  border: 1.5px #686963 solid;
-  margin: 30px 0 0 25% ;
-}
-
 footer {
   height: 4rem;
   width: 100%;
@@ -112,7 +135,7 @@ footer {
   position: absolute;
 }
 
-.teamTux {
+#teamTux {
   padding: 1rem 0rem 0rem 1rem;
   float: left;    
   margin: auto;
