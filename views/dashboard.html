@@ -1,35 +1,35 @@
 <!doctype html>
 
-<html>
+<html lang="en">
 
 <head>
   <title>Dashboard</title>
-  <link href="resources/style_dashboard.css" rel="stylesheet" />
+  <link href="../resources/style_dashboard.css" rel="stylesheet" />
 </head>
 
 <body>
   <header class="buttonbar">
-    <span class="menu">
-      <nav class="site-icon">Amalgamation</nav>
+    <div class="menu">
+      <nav class="site-icon">amalgamation.</nav>
       <nav class="menu-link">
         <a href="./messages.html">Direct Messages</a>
       </nav>
-      <nav class="menu-link"> Foobar </nav>
+      <nav class="menu-link">
+        <a href = "./foobar.html">Foobar</a>
+        </nav>
       <nav class="menu-link">
         <a href="./profile.html">Profile</a>
       </nav>
-    </span>
+    </div>
   </header>
   <section class="colorbar"></section>
   <br/>
-
-  
 
   <div class="main-body">
     <h1> Hello, User Foobar </h1>
 
     <div class="custom-select" style="width:200px;">
-      <label for="Sort By">Sort By</label>
+      <label for="sortby">Sort By</label>
       <select name="Sort By" id="sortby">
         <option value="name_up">Name ↑</option>
         <option value="name_down">Name ↓</option>
@@ -37,7 +37,7 @@
         <option value="edited_down">Last Edited ↓</option>
       </select>
     </div>
-    <br> 
+    <br>
 
     <div class="display-window">
       <h3 class="centered">Project 3</h3>
@@ -59,6 +59,7 @@
         </li>
       </ul>
       <button class="projectButton" onclick= "document.getElementById('myModal').style.display='block'" type="button">Share Settings</button>
+      <button class="projectButton" type="button">Download</button>
     </div>
     <div class="display-window">
       <h3 class="centered">Project 1</h3>
@@ -68,6 +69,7 @@
         </li>
       </ul>
       <button class="projectButton" onclick= "document.getElementById('myModal').style.display='block'" type="button">Share Settings</button>
+      <button class="projectButton" type="button">Download</button>
     </div>
   </div>
 
@@ -82,7 +84,7 @@
       <button onclick = "" type="button" class = "addUser">Add User</button>
       <button onclick = "" type="button" class = "removeUser">Remove User</button>
     </div>
-  
+
   </div>
 
   <footer>
