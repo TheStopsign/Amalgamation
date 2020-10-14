@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
 
 body {
     padding: 0;
     margin: 0;
-    font-family: "Open Sans", sans-serif, serif;    
+    font-family: "Montserrat", sans-serif, serif;
+    height: 100%; 
 }
 
 .mainTitle {
@@ -23,6 +24,7 @@ body {
     border: none;
     width: 150px;    
     font-size: 1.1em;
+    margin: 5px;
 }
 
 .button:hover {
@@ -84,7 +86,7 @@ header {
     float: left;
 }
 
-.signUp {
+.signUpBox {
     height: 500px;
     width: 50%;
     border: 1.5px black solid;
@@ -113,4 +115,9 @@ footer img {
     height: 60px;
     cursor: pointer;
     margin: 10px;
+}
+
+.spacer {
+    margin: 5px;
+    height: 10px;
 }
