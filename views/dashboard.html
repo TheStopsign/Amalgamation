@@ -5,16 +5,13 @@
 <head>
   <title>Dashboard</title>
   <link href="../resources/style_dashboard.css" rel="stylesheet" />
+  <link href="../resources/style.css" rel="stylesheet" />
 </head>
 
 <body>
-  <header class="buttonbar">
-    <div class="menu">
-      <nav class="site-icon">amalgamation.</nav>
-      <nav class="menu-link">
-        <a href="./profile.html">Profile</a>
-      </nav>
-    </div>
+  <header>
+    <h1 id="headerTitle">amalgamation.</h1>
+    <img class="editing-icon" src="../resources/images/icons8-user.png" width="50" height="50"/>
   </header>
   <section class="colorbar"></section>
   <br/>
@@ -68,6 +65,10 @@
       <button class="projectButton" type="button">Download</button>
       <button class="projectButton"  onclick="location.href='doodling.html'"  type="button">Edit</button>
     </div>
+
+    <div class="display-window new">
+      <h3 class="centered">+</h3>
+    </div>
   </div>
 
   <div id="myModal" class="modal">
@@ -84,8 +85,9 @@
 
   </div>
 
-  <footer>
-    <span class="dot">+</span>
+  <footer>         
+    <h2 id="teamTux">&copy; Team Tux</h2>
+    <a href="https://github.com/TheStopsign/Tux" target="_blank"><img alt="Github Octocat" src="../resources/images/Octocat.png"/></a>
   </footer>
 
 </body>
