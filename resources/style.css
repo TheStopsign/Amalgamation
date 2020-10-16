@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i');
 
-* {
+/* * {
   color: whitesmoke;
-}
+} */
 
 body {
   padding: 0;
@@ -139,6 +139,7 @@ footer {
   padding: 1rem 0rem 0rem 1rem;
   float: left;    
   margin: auto;
+  color: #686963;
 }
 
 footer img {
@@ -163,22 +164,26 @@ footer img {
 #collab-info {
   height: 100%;
   display: inline-block;
+  position: absolute;
   margin: 1rem;
   background: #C4C4C4;
 }
 
-#left-toolbar {    
+#left-toolbar {
   width: 15rem;
+  top: 0;
 }
 
-#content-area {    
+#content-area {
+  left: 17rem; 
   background: white;
   width: calc(100% - 17rem - 17rem - 0.5rem);
   margin: 1rem 0rem;
 }
 
-#collab-info {    
-  width: 15rem;
+#collab-info {
+  left: calc(100% - 17rem - 0.5rem);
+  width: 15.5rem;
   /* display: flex; */
   float: right;
   background: none;
@@ -199,4 +204,22 @@ footer img {
   height: 4rem;
   margin-top: 1rem;
   background: #C4C4C4;
+}
+
+#left-toolbar .editing-icon {
+  display: block;
+  margin: 0.5rem 0rem 0rem 0.5rem;
+}
+
+header .editing-icon {
+  float: right;
+  margin: 0.5rem 0.5rem 0rem 0rem;
+}
+
+#users-connected .editing-icon {
+  margin: 0.5rem 0rem 0rem 0.5rem;
+}
+
+#chat .editing-icon {
+  margin: 0.5rem 0rem 0rem 0.5rem;
 }

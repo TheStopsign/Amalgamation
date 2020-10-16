@@ -1,6 +1,6 @@
 html{
     font-family:  'Times New Roman', Times, serif;
-    color: #2d3142;
+    color: #C4C4C4;
 }
 
 body{
@@ -85,6 +85,11 @@ nav:hover{
     min-height: 200px;
     width: 15%;
     min-width: 100px;
+    color: #686963;
+}
+
+.display-window.new {
+    min-height: 0px;
 }
 
 .dot {
