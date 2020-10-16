@@ -86,9 +86,10 @@ body {
   float: left;
   font-weight: normal;
   padding: 10px;
-  color: #c4c4c4;
+  color: black;
   border: 1px solid #c4c4c4;
   display: block;
+  
 }
 
 .signUpFormItem {
