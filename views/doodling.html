@@ -3,6 +3,30 @@
 <head>
   <link rel="stylesheet" href="../resources/style.css"/>
   <title>Doodling</title>
+  <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+  <script>
+    window.addEventListener('load',function() {
+      const sock = io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']});
+
+      sock.on('connect', () => {
+        console.log("connected to editing session")
+        sock.emit("joinsession");
+      });
+
+      sock.on('draw', () => {
+        console.log("someone doodled!")
+      });
+
+      window.addEventListener('beforeunload',function() { //handles users leaving the page
+        sock.emit('leavesession')
+      })
+
+      document.getElementById('content-area').addEventListener('click',function() {
+        sock.emit('draw')
+      })
+    })
+  </script>
+  <meta charset="UTF-8">
 </head>
 <body>
 
