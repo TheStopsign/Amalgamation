@@ -4,6 +4,7 @@
   <link rel="stylesheet" href="../resources/style.css"/>
   <title>Doodling</title>
   <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
   <script>
     window.addEventListener('load',function() {
       const sock = io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']});
@@ -37,13 +38,23 @@
   </header>
 
   <div id="doodling-container">
-    <div id="left-toolbar">
-      <img class="editing-icon" src="../resources/images/icons8-pencil.png" width="50" height="50"/>
-      <img class="editing-icon" src="../resources/images/icons8-color.png" width="50" height="50"/>
-    </div>
     <div id="content-area">
 
     </div>
+
+    <div id="lc"></div>
+    <script src="../literallycanvas/_js_libs/react-0.14.3.js"></script>
+    <script src="../literallycanvas/_js_libs/literallycanvas.js"></script>
+
+    <script type="text/javascript">
+      var lc = LC.init(document.getElementById("lc"), {
+        imageURLPrefix: '../literallycanvas/_assets/lc-images',
+        toolbarPosition: 'bottom',
+        defaultStrokeWidth: 2,
+        strokeWidths: [2, 3, 5, 10, 15, 30]
+      });
+    </script>
+
     <div id="collab-info">
       <div id="users-connected">
         <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
