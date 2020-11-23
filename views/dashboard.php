@@ -89,7 +89,7 @@
 
 			  <button class=\"projectButton\" onclick= \"document.getElementById('myModal').style.display='block'\" type=\"button\">Share Settings</button>
 			  <button class=\"projectButton\" type=\"button\">Download</button>
-			  <button class=\"projectButton\"  onclick=\"location.href='doodling.html?id+". $row["ProjectID"] ."'\"  type=\"button\">Edit</button>
+			  <button class=\"projectButton\"  onclick=\"location.href='doodling.html?id=". $row["ProjectID"] ."'\"  type=\"button\">Edit</button>
 			</div>";
         }
         
