@@ -9,7 +9,7 @@ phpCAS::setNoCasServerValidation();
 
 if (isset($_REQUEST['login'])) {   
    phpCAS::forceAuthentication();
-   header("Location: /views/dashboard.html");
+   header("Location: /views/dashboard.php");
    exit();
 }
 
