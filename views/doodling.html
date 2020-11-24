@@ -5,24 +5,37 @@
   <title>Doodling</title>
   <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
-  <script>
+  <script defer>
     window.addEventListener('load',function() {
+
+      const doodleID = (new URL(window.location.href)).searchParams.get('id')
+
+      const usersConnected = document.getElementById('users-connected')
+
       const sock = io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']});
 
       sock.on('connect', () => {
         console.log("connected to editing session")
-        sock.emit("joinsession");
+        sock.emit("joinsession",{room: doodleID});
+      });
+
+      sock.on('usercount', (n) => {
+        usersConnected.innerHTML = ""
+        for(let i=0;i<n;i++) {
+          let userimg = document.createElement('img')
+          userimg.setAttribute('class','editing-icon')
+          userimg.setAttribute('src','../resources/images/icons8-smiling.png')
+          userimg.setAttribute('width','48')
+          userimg.setAttribute('height','48')
+          usersConnected.append(userimg)
+        }
       });
 
       sock.on('draw', () => {
         console.log("someone doodled!")
       });
 
-      window.addEventListener('beforeunload',function() { //handles users leaving the page
-        sock.emit('leavesession')
-      })
-
-      document.getElementById('content-area').addEventListener('click',function() {
+      document.getElementsByClassName('lc-drawing')[0].addEventListener('click',function() {
         sock.emit('draw')
       })
     })
@@ -32,7 +45,7 @@
 <body>
 
   <header>
-    <a href="dashboard.html"><h1 id="headerTitle">amalgamation.</h1></a>
+    <a href="dashboard.php"><h1 id="headerTitle">amalgamation.</h1></a>
     <img class="editing-icon" src="../resources/images/icons8-user.png" width="50" height="50"/>
     <img class="editing-icon" src="../resources/images/icons8-folder.png" width="50" height="50"/>
   </header>
@@ -57,11 +70,11 @@
 
     <div id="collab-info">
       <div id="users-connected">
+        <!-- <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
         <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
         <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
         <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
-        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
-        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
+        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/> -->
       </div>
       <div id="chat">
         <img class="editing-icon" src="../resources/images/icons8-chat.png" width="50" height="50"/>
@@ -74,7 +87,7 @@
 
   <footer>         
     <h2 id="teamTux">&copy; Team Tux</h2>
-    <a href="https://github.com/TheStopsign/Tux" target="_blank"><img alt="Github Octocat" src="../resources/images/Octocat.png"/></a>
+    <a href="https://github.com/TheStopsign/Amalgamation" target="_blank"><img alt="Github Octocat" src="../resources/images/Octocat.png"/></a>
   </footer>
 
 </body>

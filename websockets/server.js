@@ -23,16 +23,29 @@ var roomData = new Map() //will be used to actually make changes to things
 // This is an observer that logs user changes
 io.on('connection', function (socket) {
 	console.log("User connected")
-	socket.on('joinsession', function () {
+	socket.on('joinsession', function (data) {
 		console.log("\tjoining session")
+
+		socket.join(data.room);
+		var room = io.sockets.adapter.rooms.get(data.room);
+		console.log("\t" + room.size + " user(s) connected")
+		io.in(data.room).emit('usercount', room.size); //update clients' information
+
+		if (room.length == 1) { //first to join room!
+			roomData.set(data.room, data.document)
+		}
         
         socket.on('draw', function () {
             console.log('User doodled')
-            socket.emit('draw')
+            io.in(data.room).emit('draw')
 		});
 
-		socket.on('leavesession', function () {
-			console.log('User disconnected from session')
+		socket.on('disconnect', function () {
+			io.in(data.room).emit('usercount', room.size);
+			console.log('User disconnected from ' + data.room)
+			// if (room.length == 0) {
+			// 	updateFromHistory(data.room)
+			// }
 		});
 	})
 })
