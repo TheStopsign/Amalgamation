@@ -221,6 +221,11 @@ header .editing-icon {
   margin: 0.5rem 0.5rem 0rem 0rem;
 }
 
+header .logo {
+  float: left;
+  margin: 0.5rem 0.5rem 0rem 0rem;
+}
+
 #users-connected .editing-icon {
   margin: 0.5rem 0rem 0rem 0.5rem;
 }

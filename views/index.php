@@ -25,18 +25,27 @@ if (isset($_REQUEST['logout'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Home - amalgamation.</title>        
+    <title>Home - amalgamation</title>        
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i">
     <link rel="stylesheet" href="../assets/css/custom.css">
     <!-- Icon -->
-    <link rel="icon" type="image/ico" href="../resources/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../resources/images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../resources/images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../resources/images/favicons/favicon-16x16.png">
+    <link rel="manifest" href="../resources/images/favicons/site.webmanifest">
+    <link rel="mask-icon" href="../resources/images/favicons/safari-pinned-tab.svg" color="#4c3549">
+    <link rel="shortcut icon" href="../resources/images/favicons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#9f00a7">
+    <meta name="msapplication-config" content="../resources/images/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#4c3549">
+
 </head>
 
 <body><nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark navbar-custom">
-    <div class="container"><a class="navbar-brand text-lowercase" href="#">amalgamation.</a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+    <div class="container"><a class="navbar-brand text-lowercase" href="#"> <img src=../resources/images/logo1.png alt="amalgamation logo" width="300" height="75"></a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="nav navbar-nav ml-auto">
                <?php
