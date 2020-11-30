@@ -85,7 +85,30 @@ nav:hover{
     min-height: 200px;
     width: 15%;
     min-width: 100px;
-    color: #686963;
+    color: #121121;
+    position:relative;
+}
+
+.display-window:before{
+  font-size:5px;
+  position:absolute;
+  bottom:0;
+  right:0;
+  border-width: 40px 40px 0 0;
+  border-style: solid;
+  border-color: #fff #6c7a86;
+  display:block;
+  width:0;
+  content:"";
+}
+
+.bottom-right{
+  font-size:8px;
+  position:absolute;
+  bottom:0;
+  right:0;
+  width:40px;
+  height:40px;
 }
 
 .display-window.new {
