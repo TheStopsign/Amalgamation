@@ -39,8 +39,7 @@
 	$userName = "SELECT * FROM amalgamation.users WHERE users.UserID = $user";
 	$userNameResults = mysqli_query($conn, $userName);
 
-	$projects = "SELECT * FROM amalgamation.projects WHERE projects.UserID = $user";
-	$projectResults = mysqli_query($conn, $projects);
+
 
 	if(isset($_POST['title'])){
     $name = $_POST["title"];
@@ -49,6 +48,8 @@
 		$success = mysqli_query($conn, $newProj);
 	}
 
+  $projects = "SELECT * FROM amalgamation.projects WHERE projects.UserID = $user";
+	$projectResults = mysqli_query($conn, $projects);
 
   ?>
 </head>
@@ -82,17 +83,16 @@
 
         while($row = $projectResults->fetch_assoc()) {
           echo "
-			<div class=\"display-window\">
-			  <h3 class=\"centered\">". $row["name"] ."</h3>
+			<div ondblclick=\"location.href='doodling.html?id=". $row["ProjectID"] ."'\" class=\"display-window\">
+			  <h3  class=\"centered\">". $row["name"] ."</h3>
 			  <ul>
 				<li>
 				  ". $row["Description"] ."
 				</li>
 			  </ul>
 
-			  <button class=\"projectButton\" onclick= \"document.getElementById('myModal').style.display='block'\" type=\"button\">Share Settings</button>
-			  <button class=\"projectButton\" type=\"button\">Download</button>
-			  <button class=\"projectButton\"  onclick=\"location.href='doodling.html?id=". $row["ProjectID"] ."'\"  type=\"button\">Edit</button>
+        <div onclick= \"document.getElementById('myModal').style.display='block'\" class = \"bottom-right\">Share!
+        </div>
 			</div>";
         }
 
