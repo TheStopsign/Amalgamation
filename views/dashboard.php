@@ -81,8 +81,8 @@
 				</li>
 			  </ul>
 
-			  <button class=\"projectButton\" onclick= \"document.getElementById('myModal').style.display='block'\" type=\"button\">Share Settings</button>
-			  <button class=\"projectButton\" type=\"button\">Download</button>
+        <div onclick= \"document.getElementById('myModal').style.display='block'\" class = \"bottom-right\">Share!
+        </div>
 			</div>";
         }
 
