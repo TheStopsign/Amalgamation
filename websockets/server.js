@@ -52,7 +52,7 @@ io.on('connection', function (socket) {
 		socket.on('disconnect', function () {
 			let usrs = roomUsers.get(data.room)
 			for(let i=0;i<usrs.length;i++) {
-				if(usrs[i].userID == data.userID) {
+				if(usrs[i].rcs == data.rcs) {
 					usrs.splice(i,1)
 					break
 				}
