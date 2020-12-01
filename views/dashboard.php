@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+ $casUser = $_SESSION['casLogin'];
 ?>
 <!doctype html>
 
@@ -65,7 +66,7 @@
   <div class="main-body">
     <?php
 		$myName = $userNameResults->fetch_assoc();
-		echo "<h1> Hello, ". $myName["name"] ."</h1>";
+		echo "<h1> Hello, ". $casUser ."</h1>";
 	?>
 
     <div class="custom-select" style="width:200px;">
