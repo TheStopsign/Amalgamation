@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
 
 	socket.on('joinsession', (data) => {
 		myData = data
-		console.log(data.userName + " joining session " + data.room)
+		console.log(data.rcs + " joining session " + data.room)
 
 		socket.join(data.room);
 		var room = io.sockets.adapter.rooms.get(data.room);
@@ -45,7 +45,7 @@ io.on('connection', function (socket) {
 		io.in(data.room).emit('usersupdate', roomUsers.get(data.room)); //update clients' information
         
         socket.on('draw', function (data) {
-            console.log(data.userName + ' doodled')
+            console.log(data.rcs + ' doodled')
             io.in(myData.room).emit('draw', data);	
 		});
 
@@ -58,7 +58,7 @@ io.on('connection', function (socket) {
 				}
 			}
 			roomUsers.set(data.room,usrs)
-			console.log(data.userName + ' disconnected from ' + data.room)
+			console.log(data.rcs + ' disconnected from ' + data.room)
 			io.in(myData.room).emit('usersupdate', roomUsers.get(data.room));
 		});
 	})
