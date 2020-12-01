@@ -9,6 +9,7 @@ phpCAS::setNoCasServerValidation();
 
 if (isset($_REQUEST['login'])) {   
    phpCAS::forceAuthentication();
+   $_SESSION['casLogin'] = phpCAS::getUser();
    header("Location: /views/dashboard.php");
    exit();
 }

@@ -1,6 +1,8 @@
 
 <?php
 
+  session_start();
+
   $servername = "localhost";
 	$username = "root";
 	$password = "";
@@ -14,11 +16,12 @@
 	 die("Connection failed " . $conn->connect_error);
 	}
 
-	$user = 1; //hard coded for now needs integration with login
-	$userName = "SELECT * FROM amalgamation.users WHERE users.UserID = $user";
-	$userNameResults = mysqli_query($conn, $userName);
+	$rcs = strtolower($_SESSION['casLogin']); //hard coded for now needs integration with login
+  // echo strtolower($rcs);
+	// $users = "SELECT * FROM amalgamation.users WHERE users.rcs = " . strtolower($rcs);
+	// $userResults = mysqli_query($conn, $users);
 
-  $myName = $userNameResults->fetch_assoc();
+  // $myUser = $userResults->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +47,7 @@
 
   <script defer>
 
-    const userID = "<?php echo $user;?>"
-    const userName = "<?php echo $myName["name"];?>"
+    const rcs = "<?php echo $rcs;?>"
 
     window.addEventListener("load",function() {
 
@@ -57,7 +59,7 @@
 
       sock.on("connect", () => {
         console.log("connected to editing session")
-        sock.emit("joinsession",{room: doodleID, userID: userID, userName: userName});
+        sock.emit("joinsession",{room: doodleID, rcs: rcs});
       });
 
       sock.on("usersupdate", (users) => {
@@ -71,7 +73,7 @@
           userimg.setAttribute("width","48")
           userimg.setAttribute("height","48")
           let caption = document.createElement("figcaption")
-          caption.innerHTML = users[i].userName
+          caption.innerHTML = users[i].rcs
           // userimg.setAttribute("src","../resources/images/icons8-smiling.png")
           caption.setAttribute("width","48")
           // userimg.setAttribute("height","48")
@@ -82,11 +84,11 @@
       });
 
       sock.on("draw", (data) => {
-        console.log(data.userName + " doodled!")
+        console.log(data.rcs + " doodled!")
       });
 
       document.getElementsByClassName("lc-drawing")[0].addEventListener("click",function() {
-        sock.emit("draw",{userName: userName})
+        sock.emit("draw",{rcs: rcs})
       })
     })
   </script>
