@@ -18,16 +18,6 @@
 	$userName = "SELECT * FROM amalgamation.users WHERE users.UserID = $user";
 	$userNameResults = mysqli_query($conn, $userName);
 
-	// if(isset($_POST['title'])){
-  //   $name = $_POST["title"];
-  //   $desc = $_POST["desc"];
-  //   $newProj = "INSERT IGNORE INTO amalgamation.projects (name, UserID, Description) VALUES ('$name','$user','$desc')";
-	// 	$success = mysqli_query($conn, $newProj);
-	// }
-
-  // $projects = "SELECT * FROM amalgamation.projects WHERE projects.UserID = $user";
-	// $projectResults = mysqli_query($conn, $projects);
-
   $myName = $userNameResults->fetch_assoc();
 ?>
 
