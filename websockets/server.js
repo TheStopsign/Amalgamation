@@ -19,33 +19,47 @@ var io = socketio(ioserver, {
 });
 
 var roomData = new Map() //will be used to actually make changes to things
-
+var roomUsers = new Map()
 // This is an observer that logs user changes
 io.on('connection', function (socket) {
-	console.log("User connected")
-	socket.on('joinsession', function (data) {
-		console.log("\tjoining session")
+
+	let myData
+
+	socket.on('joinsession', (data) => {
+		myData = data
+		console.log(data.userName + " joining session " + data.room)
 
 		socket.join(data.room);
 		var room = io.sockets.adapter.rooms.get(data.room);
 		console.log("\t" + room.size + " user(s) connected")
-		io.in(data.room).emit('usercount', room.size); //update clients' information
 
-		if (room.length == 1) { //first to join room!
+		if (room.size == 1) { //first to join room!
 			roomData.set(data.room, data.document)
+			roomUsers.set(data.room, [data])
+		} else {
+			let usrs = roomUsers.get(data.room)
+			usrs.push(data)
+			roomUsers.set(data.room,usrs)
 		}
+
+		io.in(data.room).emit('usersupdate', roomUsers.get(data.room)); //update clients' information
         
-        socket.on('draw', function () {
-            console.log('User doodled')
-            io.in(data.room).emit('draw')
+        socket.on('draw', function (data) {
+            console.log(data.userName + ' doodled')
+            io.in(myData.room).emit('draw', data);	
 		});
 
 		socket.on('disconnect', function () {
-			io.in(data.room).emit('usercount', room.size);
-			console.log('User disconnected from ' + data.room)
-			// if (room.length == 0) {
-			// 	updateFromHistory(data.room)
-			// }
+			let usrs = roomUsers.get(data.room)
+			for(let i=0;i<usrs.length;i++) {
+				if(usrs[i].userID == data.userID) {
+					usrs.splice(i,1)
+					break
+				}
+			}
+			roomUsers.set(data.room,usrs)
+			console.log(data.userName + ' disconnected from ' + data.room)
+			io.in(myData.room).emit('usersupdate', roomUsers.get(data.room));
 		});
 	})
 })

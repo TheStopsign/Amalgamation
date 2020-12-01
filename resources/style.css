@@ -31,6 +31,12 @@ body {
   margin-right: 35%;
 }
 
+figcaption {
+  text-align: center;
+  width: 100%;
+  font-size: 0.8rem;
+}
+
 #pageTitle {
   margin: 5% 10px 10px 25%;
   width: 50%;
@@ -195,7 +201,7 @@ footer img {
 }
 
 #users-connected {
-  height: 8rem;
+  height: 12rem;
   background: #C4C4C4;
   margin-bottom: 1rem;
 }
@@ -226,8 +232,10 @@ header .logo {
   margin: 0.5rem 0.5rem 0rem 0rem;
 }
 
-#users-connected .editing-icon {
+#users-connected .editing-icon-container {
+  display: inline-block;
   margin: 0.5rem 0rem 0rem 0.5rem;
+  width: 48px;
 }
 
 #chat .editing-icon {
