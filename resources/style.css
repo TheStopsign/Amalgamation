@@ -34,6 +34,7 @@ body {
 figcaption {
   text-align: center;
   width: 100%;
+  font-size: 0.8rem;
 }
 
 #pageTitle {
@@ -229,10 +230,6 @@ header .editing-icon {
 header .logo {
   float: left;
   margin: 0.5rem 0.5rem 0rem 0rem;
-}
-
-#users-connected .editing-icon {
-  
 }
 
 #users-connected .editing-icon-container {
