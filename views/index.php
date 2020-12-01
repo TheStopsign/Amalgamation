@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once '../vendor/jasig/phpcas/CAS.php';
 
 phpCAS::setDebug();
@@ -9,6 +9,7 @@ phpCAS::setNoCasServerValidation();
 
 if (isset($_REQUEST['login'])) {   
    phpCAS::forceAuthentication();
+   $_SESSION['casLogin'] = phpCAS::getUser();
    header("Location: /views/dashboard.php");
    exit();
 }
