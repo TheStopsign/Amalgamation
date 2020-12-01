@@ -24,7 +24,7 @@
   <?php
 	$servername = "localhost";
 	$username = "root";
-	$password = "uzbGU/AT";
+	$password = "";
 	$dbname = "amalgamation";
 
 	// Create connection
@@ -83,7 +83,7 @@
 
         while($row = $projectResults->fetch_assoc()) {
           echo "
-			<div ondblclick=\"location.href='doodling.html?id=". $row["ProjectID"] ."'\" class=\"display-window\">
+			<div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
 			  <h3  class=\"centered\">". $row["name"] ."</h3>
 			  <ul>
 				<li>

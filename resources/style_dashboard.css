@@ -87,6 +87,7 @@ nav:hover{
     min-width: 100px;
     color: #121121;
     position:relative;
+    cursor: pointer;
 }
 
 .display-window:before{
@@ -120,7 +121,7 @@ nav:hover{
     width: 70px;
     background-color: #bbb;
     border-radius: 50%;
-    display: inline-block;
+    /* display: inline-block; */
     float: right;
     margin-top: 38%;
     font-size: 4em;

@@ -18,11 +18,13 @@ CREATE TABLE projects (
 );
 
 
-CREATE TABLE collaborators (
+CREATE TABLE collaborations (
     CollabID INT AUTO_INCREMENT,
-    permissions VARCHAR(255),
+    permission VARCHAR(255),
+    UserID int,
     ProjectID int,
     PRIMARY KEY (CollabID),
+    FOREIGN KEY (UserID) REFERENCES users(UserID),
     FOREIGN KEY (ProjectID) REFERENCES projects(ProjectID)
 );
 
@@ -39,6 +41,13 @@ INSERT INTO projects (name, UserID, Description) VALUES
 ('test project 3', 1, 'i can eat an entire cantelope in a single sitting'),
 ('test project 4', 1, 'i wish the roman empire would return'),
 ('test project 5', 1, 'hehe');
+
+INSERT INTO collaborations (permission, UserID, ProjectID) VALUES 
+('own', 1, 1),
+('own', 1, 2),
+('own', 1, 3),
+('own', 1, 4),
+('own', 1, 5);
 
 
 
