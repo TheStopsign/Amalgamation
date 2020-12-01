@@ -2,52 +2,47 @@ DROP DATABASE IF EXISTS amalgamation;
 CREATE DATABASE amalgamation;
 
 CREATE TABLE users (
-      UserID INT AUTO_INCREMENT, 
-      name VARCHAR(255), 
+      rcs VARCHAR(255), 
       password VARCHAR(255), 
-      PRIMARY KEY (UserID)
+      PRIMARY KEY (rcs)
 );
 
 CREATE TABLE projects (
     ProjectID INT AUTO_INCREMENT,
     name varchar(255),
-    UserID INT,
 	Description TEXT,
-    PRIMARY KEY (ProjectID),
-    FOREIGN KEY (UserID) REFERENCES users(UserID)
+    PRIMARY KEY (ProjectID)
+);
+
+CREATE TABLE permissions (
+    PermID INT AUTO_INCREMENT,
+    ProjectID INT,
+	rcs VARCHAR(255),
+    perm VARCHAR(255),
+    PRIMARY KEY (PermID),
+    FOREIGN KEY (ProjectID) REFERENCES projects(ProjectID),
+	FOREIGN KEY (rcs) REFERENCES users(rcs)
 );
 
 
-CREATE TABLE collaborations (
-    CollabID INT AUTO_INCREMENT,
-    permission VARCHAR(255),
-    UserID int,
-    ProjectID int,
-    PRIMARY KEY (CollabID),
-    FOREIGN KEY (UserID) REFERENCES users(UserID),
-    FOREIGN KEY (ProjectID) REFERENCES projects(ProjectID)
-);
 
 
 
-INSERT INTO users (name, password) VALUES
-('Ted', 'password123'),
-('Alice', 'securePW'),
-('Roger', '123456789');
+INSERT INTO users (rcs, password) VALUES
+('blakee3', 'password123'),
+('smithj1', 'securePW'),
+('jonest2', '123456789');
 
-INSERT INTO projects (name, UserID, Description) VALUES 
-('test project 1', 1, 'Here\'s a fun short description of your project! Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'),
-('test project 2', 1, 'existance is meaningless'),
-('test project 3', 1, 'i can eat an entire cantelope in a single sitting'),
-('test project 4', 1, 'i wish the roman empire would return'),
-('test project 5', 1, 'hehe');
+INSERT INTO projects (name, Description) VALUES 
+('test project 1', 'Here\'s a fun short description of your project! Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'),
+('test project 2', 'existance is meaningless'),
+('test project 3', 'i can eat an entire cantelope in a single sitting'),
+('test project 4', 'i wish the roman empire would return'),
+('test project 5', 'hehe');
 
-INSERT INTO collaborations (permission, UserID, ProjectID) VALUES 
-('own', 1, 1),
-('own', 1, 2),
-('own', 1, 3),
-('own', 1, 4),
-('own', 1, 5);
-
-
-
+INSERT INTO permissions (ProjectID, rcs, perm) VALUES 
+(1, 'blakee3', 'owner'),
+(2, 'blakee3', 'owner'),
+(3, 'blakee3', 'owner'),
+(4, 'blakee3', 'edit'),
+(4, 'jonest2', 'owner');

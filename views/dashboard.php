@@ -35,20 +35,24 @@
 	 die("Connection failed " . $conn->connect_error);
 	}
 
-	$user = 1; //hard coded for now needs integration with login
-	$userName = "SELECT * FROM amalgamation.users WHERE users.UserID = $user";
+	$user = 'blakee3'; //hard coded for now needs integration with login
+	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$user'";
 	$userNameResults = mysqli_query($conn, $userName);
 
 
 
 	if(isset($_POST['title'])){
-    $name = $_POST["title"];
-    $desc = $_POST["desc"];
-    $newProj = "INSERT IGNORE INTO amalgamation.projects (name, UserID, Description) VALUES ('$name','$user','$desc')";
+		$name = $_POST["title"];
+		$desc = $_POST["desc"];
+		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
 		$success = mysqli_query($conn, $newProj);
+		$newID = $conn->insert_id;
+		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$user','owner')";
 	}
 
-  $projects = "SELECT * FROM amalgamation.projects WHERE projects.UserID = $user";
+	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
+		ON projects.projectID = permissions.projectID
+		WHERE permissions.rcs = '$user';";
 	$projectResults = mysqli_query($conn, $projects);
 
   ?>
@@ -65,7 +69,7 @@
   <div class="main-body">
     <?php
 		$myName = $userNameResults->fetch_assoc();
-		echo "<h1> Hello, ". $myName["name"] ."</h1>";
+		echo "<h1> Hello, ". $myName["rcs"] ."</h1>";
 	?>
 
     <div class="custom-select" style="width:200px;">
@@ -83,8 +87,9 @@
 
         while($row = $projectResults->fetch_assoc()) {
           echo "
-			<div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
+			<div ondblclick=\"location.href='doodling.html?id=". $row["ProjectID"] ."'\" class=\"display-window\">
 			  <h3  class=\"centered\">". $row["name"] ."</h3>
+			  <h4  class=\"centered\">". $row["perm"] ."</h4>
 			  <ul>
 				<li>
 				  ". $row["Description"] ."
