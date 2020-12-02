@@ -38,8 +38,6 @@ session_start();
 
 	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
 	$userNameResults = mysqli_query($conn, $userName);
-  echo"HERE I AM";
-  var_dump($userNameResults);
   if(mysqli_num_rows($userNameResults)==0){
     $newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
     $addUser = mysqli_query($conn, $newUser);
