@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once '../vendor/jasig/phpcas/CAS.php';
 
 phpCAS::setDebug();
