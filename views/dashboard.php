@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+ $casUser = $_SESSION['casLogin'];
 ?>
 <!doctype html>
 
@@ -35,10 +36,13 @@
 	 die("Connection failed " . $conn->connect_error);
 	}
 
-	$user = 'blakee3'; //hard coded for now needs integration with login
-	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$user'";
-	$userNameResults = mysqli_query($conn, $userName);
 
+	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
+	$userNameResults = mysqli_query($conn, $userName);
+  if(mysqli_num_rows($userNameResults)==0){
+    $newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
+    $addUser = mysqli_query($conn, $newUser);
+  }
 
 
 	if(isset($_POST['title'])){
@@ -47,12 +51,14 @@
 		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
 		$success = mysqli_query($conn, $newProj);
 		$newID = $conn->insert_id;
-		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$user','owner')";
+
+		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
+
 	}
 
 	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 		ON projects.projectID = permissions.projectID
-		WHERE permissions.rcs = '$user';";
+		WHERE permissions.rcs = '$casUser';";
 	$projectResults = mysqli_query($conn, $projects);
 
   ?>
@@ -69,7 +75,8 @@
   <div class="main-body">
     <?php
 		$myName = $userNameResults->fetch_assoc();
-		echo "<h1> Hello, ". $myName["rcs"] ."</h1>";
+		echo "<h1> Hello, ". $casUser ."</h1>";
+
 	?>
 
     <div class="custom-select" style="width:200px;">
