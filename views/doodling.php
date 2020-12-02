@@ -27,7 +27,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="../resources/style.css"/>
+  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/css/custom.css">
+  <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
   <!-- Icon -->
   <link rel="apple-touch-icon" sizes="180x180" href="../resources/images/favicons/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="../resources/images/favicons/favicon-32x32.png">
@@ -96,9 +98,8 @@
 <body>
 
   <header>
-    <a  href="dashboard.php"><img class="logo" src=../resources/images/logo2.png alt="amalgamation logo" width="200" height="50"></a>
-    <img class="editing-icon" src="../resources/images/icons8-user.png" width="50" height="50"/>
-    <img class="editing-icon" src="../resources/images/icons8-folder.png" width="50" height="50"/>
+    <a href="index.php"><img class="logo" src=../resources/images/logo1.png alt="amalgamation logo" width="200" height="50"></a>
+    <a href="dashboard.php"><img class="editing-icon" src="../resources/images/icons8-folder-white.png" width="50" height="50"/></a>
   </header>
 
   <div id="doodling-container">
@@ -121,18 +122,13 @@
 
     <div id="collab-info">
       <div id="users-connected">
-        <!-- <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
-        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
-        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
-        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/>
-        <img class="editing-icon" src="../resources/images/icons8-smiling.png" width="48" height="48"/> -->
       </div>
       <div id="chat">
-        <img class="editing-icon" src="../resources/images/icons8-chat.png" width="50" height="50"/>
+        <img class="editing-icon" src="../resources/images/history.png" width="50" height="50"/>
       </div>
-      <div id="revision-history">
+      <!-- <div id="revision-history">
         
-      </div>
+      </div> -->
     </div>
   </div>
 

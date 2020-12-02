@@ -8,7 +8,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Open Sans", sans-serif, serif;    
-  background-color: #686963;
+  background-color: #212529;
   height: 100%;
 }
 
@@ -126,20 +126,26 @@ header {
   height: 4rem;
   width: 100%;
   top: 0;
-  background-color: #C4C4C4;
+  background-color: #343a40!important;
   font-family: "Agency FB", sans-serif, serif;
   position: absolute;
+  -webkit-box-shadow: 0 10px 6px -6px #0a0a0a;
+     -moz-box-shadow: 0 10px 6px -6px #0a0a0a;
+          box-shadow: 0 10px 6px -6px #0a0a0a;
 }
 
 footer {
   height: 4rem;
   width: 100%;
-  background-color: #C4C4C4;
+  background-color: #343a40!important;
   font-family: "Agency FB", sans-serif, serif;
   color: white;
   bottom: 0;
   left: 0;
   position: absolute;
+  -moz-box-shadow:    inset 0 0 5px #000000;
+  -webkit-box-shadow: inset 0 0 5px #000000;
+  box-shadow:         inset 0 0 5px #000000;
 }
 
 #teamTux {
@@ -202,13 +208,17 @@ footer img {
 
 #users-connected {
   height: 12rem;
-  background: #C4C4C4;
+  background: #9D9CA0;
   margin-bottom: 1rem;
+  border-style: outset;
+  border-color: #939394;
 }
 
 #chat {
-  background: #C4C4C4;
-  height: calc(100% - 9rem - 5rem);
+  background: #9D9CA0;
+  height: calc(100% - 9rem - 4rem);
+  border-style: outset;
+  border-color: #939394;
 }
 
 #revision-history {
@@ -224,12 +234,12 @@ footer img {
 
 header .editing-icon {
   float: right;
-  margin: 0.5rem 0.5rem 0rem 0rem;
+  margin: 0.5rem 1rem 0rem 0rem;
 }
 
 header .logo {
   float: left;
-  margin: 0.5rem 0.5rem 0rem 0rem;
+  margin: 0.5rem 0.5rem 0rem 1rem;
 }
 
 #users-connected .editing-icon-container {
