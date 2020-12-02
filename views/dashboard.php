@@ -53,6 +53,7 @@ session_start();
 		$newID = $conn->insert_id;
 
 		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
+		$addPerm = mysqli_query($conn, $newPerm);
 
 	}
 
