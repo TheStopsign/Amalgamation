@@ -1,3 +1,29 @@
+
+<?php
+
+  session_start();
+
+  $servername = "localhost";
+	$username = "root";
+	$password = "";
+	$dbname = "amalgamation";
+
+	// Create connection
+	global $conn;
+	$conn = mysqli_connect($servername, $username, $password);
+	// Check connection
+	if (mysqli_connect_errno()) {
+	 die("Connection failed " . $conn->connect_error);
+	}
+
+	$rcs = strtolower($_SESSION['casLogin']); //hard coded for now needs integration with login
+  // echo strtolower($rcs);
+	// $users = "SELECT * FROM amalgamation.users WHERE users.rcs = " . strtolower($rcs);
+	// $userResults = mysqli_query($conn, $users);
+
+  // $myUser = $userResults->fetch_assoc();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,44 +40,58 @@
   <meta name="theme-color" content="#4c3549">
   
   <title>Doodling - amalgamation</title>
+
   <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <meta charset="UTF-8">
+
   <script defer>
-    window.addEventListener('load',function() {
 
-      const doodleID = (new URL(window.location.href)).searchParams.get('id')
+    const rcs = "<?php echo $rcs;?>"
 
-      const usersConnected = document.getElementById('users-connected')
+    window.addEventListener("load",function() {
 
-      const sock = io('http://localhost:3001', {transports: ['websocket', 'polling', 'flashsocket']});
+      const doodleID = (new URL(window.location.href)).searchParams.get("id")
 
-      sock.on('connect', () => {
+      const usersConnected = document.getElementById("users-connected")
+
+      const sock = io("http://localhost:3001", {transports: ["websocket", "polling", "flashsocket"]});
+
+      sock.on("connect", () => {
         console.log("connected to editing session")
-        sock.emit("joinsession",{room: doodleID});
+        sock.emit("joinsession",{room: doodleID, rcs: rcs});
       });
 
-      sock.on('usercount', (n) => {
+      sock.on("usersupdate", (users) => {
         usersConnected.innerHTML = ""
-        for(let i=0;i<n;i++) {
-          let userimg = document.createElement('img')
-          userimg.setAttribute('class','editing-icon')
-          userimg.setAttribute('src','../resources/images/icons8-smiling.png')
-          userimg.setAttribute('width','48')
-          userimg.setAttribute('height','48')
-          usersConnected.append(userimg)
+        for(let i=0;i<users.length;i++) {
+          let container = document.createElement("div")
+          container.setAttribute("class","editing-icon-container")
+          let userimg = document.createElement("img")
+          userimg.setAttribute("class","editing-icon")
+          userimg.setAttribute("src","../resources/images/icons8-smiling.png")
+          userimg.setAttribute("width","48")
+          userimg.setAttribute("height","48")
+          let caption = document.createElement("figcaption")
+          caption.innerHTML = users[i].rcs
+          // userimg.setAttribute("src","../resources/images/icons8-smiling.png")
+          caption.setAttribute("width","48")
+          // userimg.setAttribute("height","48")
+          container.append(userimg)
+          container.append(caption)
+          usersConnected.append(container)
         }
       });
 
-      sock.on('draw', () => {
-        console.log("someone doodled!")
+      sock.on("draw", (data) => {
+        console.log(data.rcs + " doodled!")
       });
 
-      document.getElementsByClassName('lc-drawing')[0].addEventListener('click',function() {
-        sock.emit('draw')
+      document.getElementsByClassName("lc-drawing")[0].addEventListener("click",function() {
+        sock.emit("draw",{rcs: rcs})
       })
     })
   </script>
-  <meta charset="UTF-8">
 </head>
 <body>
 

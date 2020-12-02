@@ -25,7 +25,7 @@ session_start();
   <?php
 	$servername = "localhost";
 	$username = "root";
-	$password = "uzbGU/AT";
+	$password = "";
 	$dbname = "amalgamation";
 
 	// Create connection
@@ -35,6 +35,7 @@ session_start();
 	if (mysqli_connect_errno()) {
 	 die("Connection failed " . $conn->connect_error);
 	}
+
 
 	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
 	$userNameResults = mysqli_query($conn, $userName);
@@ -50,7 +51,9 @@ session_start();
 		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
 		$success = mysqli_query($conn, $newProj);
 		$newID = $conn->insert_id;
+
 		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
+
 	}
 
 	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
@@ -73,6 +76,7 @@ session_start();
     <?php
 		$myName = $userNameResults->fetch_assoc();
 		echo "<h1> Hello, ". $casUser ."</h1>";
+
 	?>
 
     <div class="custom-select" style="width:200px;">
