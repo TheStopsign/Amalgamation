@@ -45,11 +45,21 @@
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <meta charset="UTF-8">
 
+  <script src="../literallycanvas/_js_libs/react-0.14.3.js"></script>
+  <script src="../literallycanvas/_js_libs/literallycanvas.js"></script>
+
   <script defer>
 
     const rcs = "<?php echo $rcs;?>"
 
     window.addEventListener("load",function() {
+
+      var lc = LC.init(document.getElementById("lc"), {
+        imageURLPrefix: '../literallycanvas/_assets/lc-images',
+        toolbarPosition: 'bottom',
+        defaultStrokeWidth: 2,
+        strokeWidths: [2, 3, 5, 10, 15, 30],
+      });
 
       const doodleID = (new URL(window.location.href)).searchParams.get("id")
 
@@ -84,11 +94,13 @@
       });
 
       sock.on("draw", (data) => {
-        console.log(data.rcs + " doodled!")
+        console.log('receive',data)
+        lc.saveShape(LC.JSONToShape(data.shape), false, data.previousShapeId)
       });
 
-      document.getElementsByClassName("lc-drawing")[0].addEventListener("click",function() {
-        sock.emit("draw",{rcs: rcs})
+      lc.on('shapeSave',function(args) {
+        console.log('send')
+        sock.emit("draw",{rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId});
       })
     })
   </script>
@@ -107,17 +119,6 @@
     </div>
 
     <div id="lc"></div>
-    <script src="../literallycanvas/_js_libs/react-0.14.3.js"></script>
-    <script src="../literallycanvas/_js_libs/literallycanvas.js"></script>
-
-    <script type="text/javascript">
-      var lc = LC.init(document.getElementById("lc"), {
-        imageURLPrefix: '../literallycanvas/_assets/lc-images',
-        toolbarPosition: 'bottom',
-        defaultStrokeWidth: 2,
-        strokeWidths: [2, 3, 5, 10, 15, 30]
-      });
-    </script>
 
     <div id="collab-info">
       <div id="users-connected">
