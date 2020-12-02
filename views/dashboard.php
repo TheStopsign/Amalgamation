@@ -25,7 +25,7 @@ session_start();
   <?php
 	$servername = "localhost";
 	$username = "root";
-	$password = "";
+	$password = "uzbGU/AT";
 	$dbname = "amalgamation";
 
 	// Create connection
@@ -53,9 +53,13 @@ session_start();
 		$newID = $conn->insert_id;
 
 		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
-		$addPerm = mysqli_query($conn, $newPerm);
-
+    $addPerm = mysqli_query($conn, $newPerm);
 	}
+
+  if(isset($_POST['addUser'])){
+    $shareUser = $_POST['addUser'];
+    $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$shareUser','edit')";
+  }
 
 	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 		ON projects.projectID = permissions.projectID
@@ -115,7 +119,7 @@ session_start();
       <form action="../views/dashboard.php" method = "POST">
 		  Title: <br><input type="text" id="title" name="title"><br>
       Description: <input type="text" id="desc" name="desc"><br>
-		  <input type="submit" value="submit">
+		  <input type="submit" value="Submit">
 		</form>
 	  <h3 class="centered">+</h3>
     </div>
@@ -129,8 +133,11 @@ session_start();
       <p>Shared User 1</p>
       <p>Shared User 2</p>
       <p>Shared User 3</p>
-      <button onclick = "" type="button" class = "addUser">Add User</button>
-      <button onclick = "" type="button" class = "removeUser">Remove User</button>
+      <form action="../views/dashboard.php" method = "POST">
+        <input type="text" id="addUser" name="addUser">
+        <input type="submit" value="Add User">
+        <button onclick = "" type="button" class = "removeUser">Remove User</button>
+      <form>
     </div>
 
   </div>
