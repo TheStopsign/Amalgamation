@@ -25,7 +25,7 @@ session_start();
   <?php
 	$servername = "localhost";
 	$username = "root";
-	$password = "uzbGU/AT";
+	$password = "";
 	$dbname = "amalgamation";
 
 	// Create connection
@@ -36,8 +36,8 @@ session_start();
 	 die("Connection failed " . $conn->connect_error);
 	}
 
-
 	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
+
 	$userNameResults = mysqli_query($conn, $userName);
   if(mysqli_num_rows($userNameResults)==0){
     $newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
@@ -45,7 +45,7 @@ session_start();
   }
 
 
-	if(isset($_POST['title'])){
+	if(isset($_POST['title']) and $_POST['title'] != ""){
 		$name = $_POST["title"];
 		$desc = $_POST["desc"];
 		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
@@ -56,12 +56,16 @@ session_start();
     $addPerm = mysqli_query($conn, $newPerm);
 	}
 
-
-
 	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 		ON projects.projectID = permissions.projectID
 		WHERE permissions.rcs = '$casUser';";
+
+
 	$projectResults = mysqli_query($conn, $projects);
+
+	$permissions = "SELECT * FROM amalgamation.permissions WHERE
+		projectID = 4 AND (perm = 'owner' OR perm = 'edit')";
+	$permitResults = mysqli_query($conn, $permissions);
 
   ?>
 </head>
@@ -76,19 +80,26 @@ session_start();
 
   <div class="main-body">
     <?php
-  		$myName = $userNameResults->fetch_assoc();
+  		//$myName = $userNameResults->fetch_assoc();
   		echo "<h1> Hello, ". $casUser ."</h1>";
+      if(isset($_POST['addUser']) and $_POST['addUser'] != ""){
+        $shareUser = $_POST['addUser'];
+        $projID = $_POST['shareNumber'];
+        //echo "<script>alert('$shareUser' . '$projID');</script>";
+        $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
+        mysqli_query($conn, $shareQuery);
+        echo"<h3>Project Shared with $shareUser</h3>";
+      }
 
-        if(isset($_POST['addUser'])){
-          $shareUser = $_POST['addUser'];
-          $projID = $_POST['shareNumber'];
-          //echo "<script>alert('$shareUser' . '$projID');</script>";
-          $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
-          mysqli_query($conn, $shareQuery);
-          echo"<h1>Project Shared with $shareUser</h1>";
-        }
+      if(isset($_POST['removeUser']) and $_POST['removeUser'] != ""){
+        $removeUser = $_POST['removeUser'];
+        $projID = $_POST['shareNumber'];
+        $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
+        $removeResult = mysqli_query($conn, $removeQuery);
+        echo"<h3>Edit permissions removed from $removeUser</h3>";
+        //this is probably insecure and definitely unsanitized
+      }
     ?>
-
 
     <div class="custom-select" style="width:200px;">
       <label for="sortby">Sort By</label>
@@ -102,9 +113,23 @@ session_start();
     <br>
 
     <?php
+        function modelContent($num) {
 
-        while($row = $projectResults->fetch_assoc()) {
-          echo "
+			global $conn;
+			  $permissions = "SELECT * FROM amalgamation.permissions WHERE
+				projectID = $num AND (perm = 'owner' OR perm = 'edit')";
+			  $permitResults = mysqli_query($conn, $permissions);
+			  $final = "";
+			  while($row = $permitResults->fetch_assoc()) {
+				  $final .= "<p>". $row["rcs"] ."  ". $row["perm"] ."</p>";
+			  }
+			  return $final;
+		}
+
+
+		while($row = $projectResults->fetch_assoc()) {
+          $x = $row["ProjectID"];
+		  echo "
 			<div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
 			  <h3  class=\"centered\">". $row["name"] ."</h3>
 			  <h4  class=\"centered\">Permissions: ". $row["perm"] ."</h4>
@@ -114,41 +139,48 @@ session_start();
 				</li>
 			  </ul>
 
-        <div onclick= \"document.getElementById('myModal').style.display='block'; document.getElementById('shareNumber').value = ".$row["ProjectID"]."\" class = \"bottom-right\">Share!
+        <div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!
         </div>
-			</div>";
+			</div>
+
+		<div id=\"myModal".$x."\" class=\"modal\">
+
+			<!-- Modal content -->
+			<div class=\"modal-content\">
+			  <button onclick = \"document.getElementById('myModal".$x."').style.display='none'\" type=\"button\" class = \"close\">X</button>
+			  ". modelContent($x) ."
+        <form action=\"../views/dashboard.php\" method = \"POST\">
+   	        <input type=\"text\" id=\"addUser\" name=\"addUser\" placeholder='RCS here'>
+   	        <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value = $x>
+   	        <input type=\"submit\" value=\"Add User\">
+   	        <input type=\"text\" id=\"removeUser\" name=\"removeUser\">
+   	        <input type=\"submit\" value=\"Remove User\">
+   	      <form>
+			</div>
+
+		  </div>
+
+
+			";
+
+
         }
 
       ?>
 
-    <div class="display-window new">
-      <form action="../views/dashboard.php" method = "POST">
+    <div class="add-window">
+      <h3 class="centered"> Add Project </h3>
+	  <div class="centered"><form action="../views/dashboard.php" method = "POST">
 		  Title: <br><input type="text" id="title" name="title"><br>
-      Description: <input type="text" id="desc" name="desc"><br>
+      Description: <br><input type="text" id="desc" name="desc"><br>
 		  <input type="submit" value="Submit">
 		</form>
-	  <h3 class="centered">+</h3>
-    </div>
-  </div>
-
-  <div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-
-      <button onclick = "document.getElementById('myModal').style.display='none'" type="button" class = "close">X</button>
-      <p>Shared User 1</p>
-      <p>Shared User 2</p>
-      <p>Shared User 3</p>
-      <form action="../views/dashboard.php" method = "POST">
-        <input type="text" id="addUser" name="addUser">
-        <input type="text" id='shareNumber' name ='shareNumber' style="display:none" value = 0>
-        <input type="submit" value="Add User">
-        <button onclick = "" type="button" class = "removeUser">Remove User</button>
-      <form>
+		</div>
 
     </div>
   </div>
+
+
 
   <footer>
     <h2 id="teamTux">&copy; Team Tux</h2>
