@@ -99,8 +99,8 @@
 
       function addToHistory(event) {
         let toadd = document.createElement("li")
-        toadd.innerHTML = event.rcs + " added "+ event.shape.className
-        history.append(toadd)
+        toadd.innerHTML = (event.rcs?event.rcs:"guest") + " added "+ event.shape.className
+        history.prepend(toadd)
       }
 
       sock.on("draw", (data) => {
