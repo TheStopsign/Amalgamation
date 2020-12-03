@@ -11,6 +11,7 @@ CREATE TABLE projects (
     ProjectID INT AUTO_INCREMENT,
     name varchar(255),
 	Description TEXT,
+    history JSON,
     PRIMARY KEY (ProjectID)
 );
 

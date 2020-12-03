@@ -1,5 +1,12 @@
 const express = require('express')
 const cors = require('cors')
+var mysql = require('mysql');
+var conn = mysql.createConnection ( {  
+	host: "localhost",
+	user: "root",
+	password: "",
+	database: "amalgamation"
+} );
 const port = 3000
 
 var app = express();
@@ -30,42 +37,61 @@ io.on('connection', function (socket) {
 
 		socket.join(data.room);
 		var room = io.sockets.adapter.rooms.get(data.room);
-
-		if (room.size == 1) { //first to join room!
-			roomData.set(data.room,[])
-			roomUsers.set(data.room, [data])
-		} else {
-			let usrs = roomUsers.get(data.room)
-			usrs.push(data)
-			roomUsers.set(data.room,usrs)
-		}
-
-		socket.emit("loadsessionchanges", roomData.get(data.room))
-		io.in(data.room).emit('usersupdate', roomUsers.get(data.room)); //update clients' information
-        
-        socket.on('draw', function (data) {
-			let history = roomData.get(myData.room)
-			history.push(data)
-			roomData.set(myData.room,history)
-			socket.to(myData.room).emit('draw', data);
-		});
-
-		socket.on('disconnect', function () {
-			let usrs = roomUsers.get(data.room)
-			for(let i=0;i<usrs.length;i++) {
-				if(usrs[i].rcs == data.rcs) {
-					usrs.splice(i,1)
-					break
+		
+		let getStatement = "SELECT * FROM projects WHERE ProjectID = '"+data.room+"'"
+		conn.query(getStatement, function (err, result) {
+			if (err) throw err;
+			
+			if (room.size == 1) { //first to join room!
+				let parsed = JSON.parse(result[0].history)
+				if(parsed) {
+					roomData.set(data.room,parsed.history)
+				} else {
+					roomData.set(data.room,[])
 				}
+				roomUsers.set(data.room, [data])
+			} else {
+				let usrs = roomUsers.get(data.room)
+				usrs.push(data)
+				roomUsers.set(data.room,usrs)
 			}
-			roomUsers.set(data.room,usrs)
 
-			if(room.size == 0) {
-				roomData.delete(data.room)
-				roomUsers.delete(data.room)
-			}
+			socket.emit("loadsessionchanges", roomData.get(data.room))
+			io.in(data.room).emit('usersupdate', roomUsers.get(data.room)); //update clients' information
+			
+			socket.on('draw', function (data) {
+				let history = roomData.get(myData.room)
+				history.push(data)
+				roomData.set(myData.room,history)
+				socket.to(myData.room).emit('draw', data);
+			});
 
-			io.in(myData.room).emit('usersupdate', roomUsers.get(data.room));
+			socket.on('disconnect', function () {
+				let usrs = roomUsers.get(data.room)
+				for(let i=0;i<usrs.length;i++) {
+					if(usrs[i].rcs == data.rcs) {
+						usrs.splice(i,1)
+						break
+					}
+				}
+				roomUsers.set(data.room,usrs)
+
+				if(room.size == 0) {
+
+					console.log(roomData.get(myData.room))
+					let updateStatement = "UPDATE projects SET history = '" + JSON.stringify({history:roomData.get(data.room)}) + "' WHERE ProjectID = " + data.room
+					console.log(updateStatement)
+					conn.query(updateStatement, function (err, result) {
+						if (err) throw err;
+						roomData.delete(data.room)
+					});
+
+					roomUsers.delete(data.room)
+				}
+
+				io.in(myData.room).emit('usersupdate', roomUsers.get(data.room));
+			});
+
 		});
 	})
 })
