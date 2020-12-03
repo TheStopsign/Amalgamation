@@ -79,16 +79,24 @@ session_start();
   		$myName = $userNameResults->fetch_assoc();
   		echo "<h1> Hello, ". $casUser ."</h1>";
 
-        if(isset($_POST['addUser'])){
-          $shareUser = $_POST['addUser'];
-          $projID = $_POST['shareNumber'];
-          //echo "<script>alert('$shareUser' . '$projID');</script>";
-          $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
-          mysqli_query($conn, $shareQuery);
-          echo"<h1>Project Shared with $shareUser</h1>";
-        }
-    ?>
+      if(isset($_POST['addUser']) and $_POST['addUser'] != ""){
+        $shareUser = $_POST['addUser'];
+        $projID = $_POST['shareNumber'];
+        //echo "<script>alert('$shareUser' . '$projID');</script>";
+        $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
+        mysqli_query($conn, $shareQuery);
+        echo"<h3>Project Shared with $shareUser</h3>";
+      }
 
+      if(isset($_POST['removeUser']) and $_POST['removeUser'] != ""){
+        $removeUser = $_POST['removeUser'];
+        $projID = $_POST['shareNumber'];
+        $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
+        $removeResult = mysqli_query($conn, $removeQuery);
+        echo"<h3>Edit permissions removed from $removeUser</h3>";
+        //this is probably insecure and definitely unsanitized
+      }
+    ?>
 
     <div class="custom-select" style="width:200px;">
       <label for="sortby">Sort By</label>
@@ -141,10 +149,11 @@ session_start();
       <p>Shared User 2</p>
       <p>Shared User 3</p>
       <form action="../views/dashboard.php" method = "POST">
-        <input type="text" id="addUser" name="addUser">
+        <input type="text" id="addUser" name="addUser" placeholder='RCS here'>
         <input type="text" id='shareNumber' name ='shareNumber' style="display:none" value = 0>
         <input type="submit" value="Add User">
-        <button onclick = "" type="button" class = "removeUser">Remove User</button>
+        <input type="text" id="removeUser" name="removeUser">
+        <input type="submit" value="Remove User">
       <form>
 
     </div>
