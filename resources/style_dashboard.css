@@ -90,6 +90,22 @@ nav:hover{
     cursor: pointer;
 }
 
+.add-window{
+ float: left;
+    margin-left: 20px;
+    margin-bottom: 50px;
+    background-color: #DDDDDD ;
+    box-shadow: 3px 8px #6c7a86;
+    border: 1px black;
+    border-radius: 10px;
+    min-height: 200px;
+    width: 15%;
+    min-width: 100px;
+    color: #121121;
+    position:relative;
+    cursor: pointer;
+}
+
 .display-window:before{
   font-size:5px;
   position:absolute;
@@ -112,9 +128,7 @@ nav:hover{
   height:40px;
 }
 
-.display-window.new {
-    min-height: 0px;
-}
+
 
 .dot {
     height: 70px;
