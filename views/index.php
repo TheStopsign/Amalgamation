@@ -46,7 +46,7 @@ if (isset($_REQUEST['logout'])) {
 </head>
 
 <body><nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark navbar-custom">
-    <div class="container"><a class="navbar-brand text-lowercase" href="#"> <img src=../resources/images/logo1.png alt="amalgamation logo" width="300" height="75"></a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+    <div class="container"><a class="navbar-brand text-lowercase" href="#"> <img src=../resources/images/logo1.png alt="amalgamation logo" width="200" height="50"></a><button data-toggle="collapse" data-target="#navbarResponsive" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="nav navbar-nav ml-auto">
                <?php

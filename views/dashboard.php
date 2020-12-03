@@ -72,7 +72,7 @@ session_start();
 
 <body>
   <header>
-    <img class="logo" src=../resources/images/logo2.png alt="amalgamation logo" width="200" height="50">
+    <a href="index.php"><img class="logo" src=../resources/images/logo1.png alt="amalgamation logo" width="200" height="50"></a>
     <img class="editing-icon" src="../resources/images/icons8-user.png" width="50" height="50"/>
   </header>
   <section class="colorbar"></section>

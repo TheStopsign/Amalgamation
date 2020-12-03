@@ -8,7 +8,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Open Sans", sans-serif, serif;    
-  background-color: #212529;
+  background-color: #282829;
   height: 100%;
 }
 
@@ -137,7 +137,7 @@ header {
 footer {
   height: 4rem;
   width: 100%;
-  background-color: #343a40!important;
+  background-color: #000000 !important;
   font-family: "Agency FB", sans-serif, serif;
   color: white;
   bottom: 0;
@@ -152,7 +152,6 @@ footer {
   padding: 1rem 0rem 0rem 1rem;
   float: left;    
   margin: auto;
-  color: #686963;
 }
 
 footer img {
