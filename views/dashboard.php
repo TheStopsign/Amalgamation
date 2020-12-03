@@ -1,6 +1,6 @@
 <?php
 session_start();
- $casUser = $_SESSION['casLogin'];
+ $casUser = strtolower($_SESSION['casLogin']);
 ?>
 <!doctype html>
 
@@ -25,7 +25,7 @@ session_start();
   <?php
 	$servername = "localhost";
 	$username = "root";
-	$password = "";
+	$password = "uzbGU/AT";
 	$dbname = "amalgamation";
 
 	// Create connection
@@ -53,9 +53,10 @@ session_start();
 		$newID = $conn->insert_id;
 
 		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
-		$addPerm = mysqli_query($conn, $newPerm);
-
+    $addPerm = mysqli_query($conn, $newPerm);
 	}
+
+
 
 	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 		ON projects.projectID = permissions.projectID
@@ -75,10 +76,19 @@ session_start();
 
   <div class="main-body">
     <?php
-		$myName = $userNameResults->fetch_assoc();
-		echo "<h1> Hello, ". $casUser ."</h1>";
+  		$myName = $userNameResults->fetch_assoc();
+  		echo "<h1> Hello, ". $casUser ."</h1>";
 
-	?>
+        if(isset($_POST['addUser'])){
+          $shareUser = $_POST['addUser'];
+          $projID = $_POST['shareNumber'];
+          //echo "<script>alert('$shareUser' . '$projID');</script>";
+          $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
+          mysqli_query($conn, $shareQuery);
+          echo"<h1>Project Shared with $shareUser</h1>";
+        }
+    ?>
+
 
     <div class="custom-select" style="width:200px;">
       <label for="sortby">Sort By</label>
@@ -97,14 +107,14 @@ session_start();
           echo "
 			<div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
 			  <h3  class=\"centered\">". $row["name"] ."</h3>
-			  <h4  class=\"centered\">". $row["perm"] ."</h4>
+			  <h4  class=\"centered\">Permissions: ". $row["perm"] ."</h4>
 			  <ul>
 				<li>
 				  ". $row["Description"] ."
 				</li>
 			  </ul>
 
-        <div onclick= \"document.getElementById('myModal').style.display='block'\" class = \"bottom-right\">Share!
+        <div onclick= \"document.getElementById('myModal').style.display='block'; document.getElementById('shareNumber').value = ".$row["ProjectID"]."\" class = \"bottom-right\">Share!
         </div>
 			</div>";
         }
@@ -115,7 +125,7 @@ session_start();
       <form action="../views/dashboard.php" method = "POST">
 		  Title: <br><input type="text" id="title" name="title"><br>
       Description: <input type="text" id="desc" name="desc"><br>
-		  <input type="submit" value="submit">
+		  <input type="submit" value="Submit">
 		</form>
 	  <h3 class="centered">+</h3>
     </div>
@@ -125,14 +135,19 @@ session_start();
 
     <!-- Modal content -->
     <div class="modal-content">
+
       <button onclick = "document.getElementById('myModal').style.display='none'" type="button" class = "close">X</button>
       <p>Shared User 1</p>
       <p>Shared User 2</p>
       <p>Shared User 3</p>
-      <button onclick = "" type="button" class = "addUser">Add User</button>
-      <button onclick = "" type="button" class = "removeUser">Remove User</button>
-    </div>
+      <form action="../views/dashboard.php" method = "POST">
+        <input type="text" id="addUser" name="addUser">
+        <input type="text" id='shareNumber' name ='shareNumber' style="display:none" value = 0>
+        <input type="submit" value="Add User">
+        <button onclick = "" type="button" class = "removeUser">Remove User</button>
+      <form>
 
+    </div>
   </div>
 
   <footer>
