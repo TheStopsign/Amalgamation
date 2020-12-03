@@ -1,172 +1,192 @@
-html{
-    font-family:  'Times New Roman', Times, serif;
-    color: #C4C4C4;
-}
+<?php
+session_start();
+ $casUser = strtolower($_SESSION['casLogin']);
+?>
+<!doctype html>
 
-body{
-    margin: 0;
-    background-color: #C4C4C4;
-}
+<html lang="en">
 
-.centered{
-    text-align: center;
-}
+<head>
+  <title>Dashboard - amalgamation</title>
+  <link href="../resources/style_dashboard.css" rel="stylesheet" />
+  <link href="../resources/style.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../resources/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../resources/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../resources/images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="../resources/images/favicons/site.webmanifest">
+  <link rel="mask-icon" href="../resources/images/favicons/safari-pinned-tab.svg" color="#4c3549">
+  <link rel="shortcut icon" href="../resources/images/favicons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#9f00a7">
+  <meta name="msapplication-config" content="../resources/images/favicons/browserconfig.xml">
+  <meta name="theme-color" content="#4c3549">
 
-.custom-select {
-    position: relative;
-    font-family: 'Times New Roman', Times, serif;
+  <?php
+	$servername = "localhost";
+	$username = "root";
+	$password = "";
+	$dbname = "amalgamation";
+
+	// Create connection
+	global $conn;
+	$conn = mysqli_connect($servername, $username, $password);
+	// Check connection
+	if (mysqli_connect_errno()) {
+	 die("Connection failed " . $conn->connect_error);
+	}
+
+	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
+
+	$userNameResults = mysqli_query($conn, $userName);
+  if(mysqli_num_rows($userNameResults)==0){
+    $newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
+    $addUser = mysqli_query($conn, $newUser);
   }
 
-.left{
-    text-align: left;
-}
 
-.buttonbar{
-    background-color: #C4C4C4;
-    width: 100%;
-    height: 4rem;
-    padding-top: 15px;
-}
+	if(isset($_POST['title']) and $_POST['title'] != ""){
+		$name = $_POST["title"];
+		$desc = $_POST["desc"];
+		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
+		$success = mysqli_query($conn, $newProj);
+		$newID = $conn->insert_id;
 
-.colorbar{
-    background-color: #686963;
-    width: 100%;
-    height: 20px;
-}
+		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
+    $addPerm = mysqli_query($conn, $newPerm);
+	}
 
-span.menu{
-    width: 100%;
-    height: 50px;
-}
+	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
+		ON projects.projectID = permissions.projectID
+		WHERE permissions.rcs = '$casUser';";
 
-nav.site-icon{
-    float: left;
-    color: #686963;
-    font-size: 2rem;
-    font-family:  "Agency FB", sans-serif, serif;
-    margin: 10px;
-    margin-right: 30px;
-    margin-top: 10px;
-}
 
-nav.menu-link{
-    float:right;
-    width: 10%;
-    height: 40px;
-    border: 1px solid navy;
-    box-shadow: 1px 5px;
-    border-radius: 10px;
-    background-color: #686963;
-}
+	$projectResults = mysqli_query($conn, $projects);
 
-a {
-  color: white;
-  font-size:2em;
-  text-align: center;
-}
+	$permissions = "SELECT * FROM amalgamation.permissions WHERE
+		projectID = 4 AND (perm = 'owner' OR perm = 'edit')";
+	$permitResults = mysqli_query($conn, $permissions);
 
-nav:hover{
-    color: #4d79dd; /* this should make it appear clickable when hovered */
-}
+  ?>
+</head>
 
-.main-body{
-    margin-left: 10px;
-    margin-right: 100px;
-}
+<body>
+  <header>
+    <img class="logo" src=../resources/images/logo2.png alt="amalgamation logo" width="200" height="50">
+    <img class="editing-icon" src="../resources/images/icons8-user.png" width="50" height="50"/>
+  </header>
+  <section class="colorbar"></section>
+  <br/>
 
-.display-window{
-    float: left;
-    margin-left: 20px;
-    margin-bottom: 50px;
-    background-color: #DDDDDD ;
-    box-shadow: 3px 8px #6c7a86;
-    border: 1px black;
-    border-radius: 10px;
-    min-height: 200px;
-    width: 15%;
-    min-width: 100px;
-    color: #121121;
-    position:relative;
-    cursor: pointer;
-}
+  <div class="main-body">
+    <?php
+  		//$myName = $userNameResults->fetch_assoc();
+  		echo "<h1> Hello, ". $casUser ."</h1>";
+      if(isset($_POST['addUser']) and $_POST['addUser'] != ""){
+        $shareUser = $_POST['addUser'];
+        $projID = $_POST['shareNumber'];
+        //echo "<script>alert('$shareUser' . '$projID');</script>";
+        $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
+        mysqli_query($conn, $shareQuery);
+        echo"<h3>Project Shared with $shareUser</h3>";
+      }
 
-.display-window:before{
-  font-size:5px;
-  position:absolute;
-  bottom:0;
-  right:0;
-  border-width: 40px 40px 0 0;
-  border-style: solid;
-  border-color: #fff #6c7a86;
-  display:block;
-  width:0;
-  content:"";
-}
+      if(isset($_POST['removeUser']) and $_POST['removeUser'] != ""){
+        $removeUser = $_POST['removeUser'];
+        $projID = $_POST['shareNumber'];
+        $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
+        $removeResult = mysqli_query($conn, $removeQuery);
+        echo"<h3>Edit permissions removed from $removeUser</h3>";
+        //this is probably insecure and definitely unsanitized
+      }
+    ?>
 
-.bottom-right{
-  font-size:8px;
-  position:absolute;
-  bottom:0;
-  right:0;
-  width:40px;
-  height:40px;
-}
+    <div class="custom-select" style="width:200px;">
+      <label for="sortby">Sort By</label>
+      <select name="Sort By" id="sortby">
+        <option value="name_up">Name ↑</option>
+        <option value="name_down">Name ↓</option>
+        <option value="edited_up">Last Edited ↑</option>
+        <option value="edited_down">Last Edited ↓</option>
+      </select>
+    </div>
+    <br>
 
-.display-window.new {
-    min-height: 0px;
-}
+    <?php
+        function modelContent($num) {
 
-.dot {
-    height: 70px;
-    width: 70px;
-    background-color: #bbb;
-    border-radius: 50%;
-    /* display: inline-block; */
-    float: right;
-    margin-top: 38%;
-    font-size: 4em;
-    text-align: center;
-  }
+			global $conn;
+			  $permissions = "SELECT * FROM amalgamation.permissions WHERE
+				projectID = $num AND (perm = 'owner' OR perm = 'edit')";
+			  $permitResults = mysqli_query($conn, $permissions);
+			  $final = "";
+			  while($row = $permitResults->fetch_assoc()) {
+				  $final .= "<p>". $row["rcs"] ."  ". $row["perm"] ."</p>";
+			  }
+			  return $final;
+		}
 
-  .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
 
-  /* Modal Content/Box */
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 20%; /* Could be more or less, depending on screen size */
-  }
+		while($row = $projectResults->fetch_assoc()) {
+          $x = $row["ProjectID"];
+		  echo "
+			<div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
+			  <h3  class=\"centered\">". $row["name"] ."</h3>
+			  <h4  class=\"centered\">Permissions: ". $row["perm"] ."</h4>
+			  <ul>
+				<li>
+				  ". $row["Description"] ."
+				</li>
+			  </ul>
 
-  /* The Close Button */
-  .close {
-    color: #aaa;
-    float: inline-end;
-    font-size: 28px;
-    font-weight: bold;
-  }
+        <div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!
+        </div>
+			</div>
 
-  /* Buttons on dashboard for project */
-  .projectButton {
-    margin-left: 30px;
+		<div id=\"myModal".$x."\" class=\"modal\">
 
-  }
+			<!-- Modal content -->
+			<div class=\"modal-content\">
+			  <button onclick = \"document.getElementById('myModal".$x."').style.display='none'\" type=\"button\" class = \"close\">X</button>
+			  ". modelContent($x) ."
+        <form action=\"../views/dashboard.php\" method = \"POST\">
+   	        <input type=\"text\" id=\"addUser\" name=\"addUser\" placeholder='RCS here'>
+   	        <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value = $x>
+   	        <input type=\"submit\" value=\"Add User\">
+   	        <input type=\"text\" id=\"removeUser\" name=\"removeUser\">
+   	        <input type=\"submit\" value=\"Remove User\">
+   	      <form>
+			</div>
 
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
+		  </div>
+
+
+			";
+
+
+        }
+
+      ?>
+
+    <div class="add-window">
+      <h3 class="centered"> Add Project </h3>
+	  <div class="centered"><form action="../views/dashboard.php" method = "POST">
+		  Title: <br><input type="text" id="title" name="title"><br>
+      Description: <br><input type="text" id="desc" name="desc"><br>
+		  <input type="submit" value="Submit">
+		</form>
+		</div>
+
+    </div>
+  </div>
+
+
+
+  <footer>
+    <h2 id="teamTux">&copy; Team Tux</h2>
+    <a href="https://github.com/TheStopsign/Tux" target="_blank"><img alt="Github Octocat" src="../resources/images/Octocat.png"/></a>
+  </footer>
+
+</body>
+
+</html>
