@@ -27,14 +27,12 @@ io.on('connection', function (socket) {
 
 	socket.on('joinsession', (data) => {
 		myData = data
-		console.log(data.rcs + " joining session " + data.room)
 
 		socket.join(data.room);
 		var room = io.sockets.adapter.rooms.get(data.room);
-		console.log("\t" + room.size + " user(s) connected")
 
 		if (room.size == 1) { //first to join room!
-			roomData.set(data.room, data.document)
+			roomData.set(data.room,[])
 			roomUsers.set(data.room, [data])
 		} else {
 			let usrs = roomUsers.get(data.room)
@@ -42,11 +40,14 @@ io.on('connection', function (socket) {
 			roomUsers.set(data.room,usrs)
 		}
 
+		socket.emit("loadsessionchanges", roomData.get(data.room))
 		io.in(data.room).emit('usersupdate', roomUsers.get(data.room)); //update clients' information
         
         socket.on('draw', function (data) {
-            console.log(data.rcs + ' doodled')
-            io.in(myData.room).emit('draw', data);	
+			let history = roomData.get(myData.room)
+			history.push(data)
+			roomData.set(myData.room,history)
+			socket.to(myData.room).emit('draw', data);
 		});
 
 		socket.on('disconnect', function () {
@@ -58,7 +59,12 @@ io.on('connection', function (socket) {
 				}
 			}
 			roomUsers.set(data.room,usrs)
-			console.log(data.rcs + ' disconnected from ' + data.room)
+
+			if(room.size == 0) {
+				roomData.delete(data.room)
+				roomUsers.delete(data.room)
+			}
+
 			io.in(myData.room).emit('usersupdate', roomUsers.get(data.room));
 		});
 	})

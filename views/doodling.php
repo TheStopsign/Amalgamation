@@ -96,12 +96,18 @@
       });
 
       sock.on("draw", (data) => {
-        console.log('receive',data)
         lc.saveShape(LC.JSONToShape(data.shape), false, data.previousShapeId)
       });
 
+      sock.on("loadsessionchanges", (data) => {
+        if(data) {
+          data.forEach(event => {
+            lc.saveShape(LC.JSONToShape(event.shape), false, event.previousShapeId)
+          })
+        }
+      });
+
       lc.on('shapeSave',function(args) {
-        console.log('send')
         sock.emit("draw",{rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId});
       })
     })
