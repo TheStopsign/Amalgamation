@@ -168,12 +168,14 @@ session_start();
 
       ?>
 
-    <div class="display-window new">
-      <form action="../views/dashboard.php" method = "POST">
+    <div class="add-window">
+      <h3 class="centered"> Add Project </h3>
+	  <div class="centered"><form action="../views/dashboard.php" method = "POST">
 		  Title: <br><input type="text" id="title" name="title"><br>
       Description: <br><input type="text" id="desc" name="desc"><br>
 		  <input type="submit" value="Submit">
 		</form>
+		</div>
 
     </div>
   </div>
