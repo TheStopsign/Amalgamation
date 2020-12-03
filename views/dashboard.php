@@ -37,12 +37,15 @@ session_start();
 	}
 
 
-	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
+	$userName = "blakee3";
+	$casUser = "blakee3";
+	/*"SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
+	
 	$userNameResults = mysqli_query($conn, $userName);
   if(mysqli_num_rows($userNameResults)==0){
     $newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
     $addUser = mysqli_query($conn, $newUser);
-  }
+  }*/
 
 
 	if(isset($_POST['title'])){
@@ -59,8 +62,15 @@ session_start();
 	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 		ON projects.projectID = permissions.projectID
 		WHERE permissions.rcs = '$casUser';";
+	
+		
 	$projectResults = mysqli_query($conn, $projects);
-
+	
+	$permissions = "SELECT * FROM amalgamation.permissions WHERE 
+		projectID = 4 AND (perm = 'owner' OR perm = 'edit')";
+	$permitResults = mysqli_query($conn, $permissions);
+	
+	
   ?>
 </head>
 
@@ -74,7 +84,7 @@ session_start();
 
   <div class="main-body">
     <?php
-		$myName = $userNameResults->fetch_assoc();
+		//$myName = $userNameResults->fetch_assoc();
 		echo "<h1> Hello, ". $casUser ."</h1>";
 
 	?>
@@ -91,9 +101,23 @@ session_start();
     <br>
 
     <?php
-
-        while($row = $projectResults->fetch_assoc()) {
-          echo "
+        function modelContent($num) {
+			
+			global $conn;
+			  $permissions = "SELECT * FROM amalgamation.permissions WHERE 
+				projectID = $num AND (perm = 'owner' OR perm = 'edit')";
+			  $permitResults = mysqli_query($conn, $permissions);
+			  $final = "";
+			  while($row = $permitResults->fetch_assoc()) {
+				  $final .= "<p>". $row["rcs"] ."  ". $row["perm"] ."</p> </br>";
+			  }
+			  return $final;
+		}
+		
+		
+		while($row = $projectResults->fetch_assoc()) {
+          $x = $row["ProjectID"];
+		  echo "
 			<div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
 			  <h3  class=\"centered\">". $row["name"] ."</h3>
 			  <h4  class=\"centered\">". $row["perm"] ."</h4>
@@ -103,11 +127,28 @@ session_start();
 				</li>
 			  </ul>
 
-        <div onclick= \"document.getElementById('myModal').style.display='block'\" class = \"bottom-right\">Share!
+        <div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!
         </div>
-			</div>";
-        }
+			</div>
+		
+		<div id=\"myModal".$x."\" class=\"modal\">
 
+			<!-- Modal content -->
+			<div class=\"modal-content\">
+			  <button onclick = \"document.getElementById('myModal".$x."').style.display='none'\" type=\"button\" class = \"close\">X</button>
+			  ". modelContent($x) ."
+			  <button onclick = \"\" type=\"button\" class = \"addUser\">Add User</button>
+			  <button onclick = \"\" type=\"button\" class = \"removeUser\">Remove User</button>
+			</div>
+
+		  </div>
+		
+			
+			";
+			
+			
+        }
+		
       ?>
 
     <div class="display-window new">
