@@ -54,6 +54,7 @@ if (isset($_REQUEST['logout'])) {
                      echo '<li class="nav-item"><a class="nav-link" href="?login=">Log In</a></li>';
                   } else {
                      echo '<li class="nav-item"><a class="nav-link" href="?logout=">Logout</a></li>';
+                     echo '<li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>';
                   }
                 ?>
             </ul>
