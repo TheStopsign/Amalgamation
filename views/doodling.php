@@ -95,20 +95,31 @@
         }
       });
 
+      const history = document.getElementById("history-list")
+
+      function addToHistory(event) {
+        let toadd = document.createElement("li")
+        toadd.innerHTML = event.rcs + " added "+ event.shape.className
+        history.append(toadd)
+      }
+
       sock.on("draw", (data) => {
         lc.saveShape(LC.JSONToShape(data.shape), false, data.previousShapeId)
+        addToHistory(data)
       });
 
       sock.on("loadsessionchanges", (data) => {
         if(data) {
           data.forEach(event => {
             lc.saveShape(LC.JSONToShape(event.shape), false, event.previousShapeId)
+            addToHistory(event)
           })
         }
       });
 
       lc.on('shapeSave',function(args) {
         sock.emit("draw",{rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId});
+        addToHistory({rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId})
       })
     })
   </script>
@@ -130,8 +141,11 @@
     <div id="collab-info">
       <div id="users-connected">
       </div>
-      <div id="chat">
+      <div id="history">
         <img class="editing-icon" src="../resources/images/history.png" width="50" height="50"/>
+        <figcaption>History</figcaption>
+        <ol id="history-list">
+        </ol>
       </div>
       <!-- <div id="revision-history">
         
