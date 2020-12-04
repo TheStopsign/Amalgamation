@@ -50,7 +50,8 @@ if (isset($_REQUEST['logout'])) {
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="nav navbar-nav ml-auto">
                <?php
-                  if (!phpCAS::checkAuthentication()) {
+                    $authenticated = phpCAS::checkAuthentication();
+                  if (!$authenticated) {
                      echo '<li class="nav-item"><a class="nav-link" href="?login=">Log In</a></li>';
                   } else {
                      echo '<li class="nav-item"><a class="nav-link" href="?logout=">Logout</a></li>';
@@ -65,7 +66,14 @@ if (isset($_REQUEST['logout'])) {
         <div class="masthead-content">
             <div class="container">
                 <h1 class="d-inline-block masthead-heading mb-0">amalgamation.</h1>
-                <h2 class="text-lowercase text-white masthead-subheading mb-0" style="width: 1096px;">a collaborative doodling application</h2><a class="btn btn-dark btn-xl rounded-pill mt-5" role="button" href="#">Start drawing</a></div>
+                <h2 class="text-lowercase text-white masthead-subheading mb-0" style="width: 1096px;">a collaborative doodling application</h2>
+                <?php
+                  if (!$authenticated) {
+                    echo '<a class="btn btn-dark btn-xl rounded-pill mt-5" role="button" href="?login=">Start drawing</a></div>';
+                  } else {
+                    echo '<a class="btn btn-dark btn-xl rounded-pill mt-5" role="button" href="dashboard.php">Start drawing</a></div>';
+                  }
+                ?>        
         </div>
     </header>
     <section class="text-center">
