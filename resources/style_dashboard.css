@@ -59,6 +59,10 @@ nav.menu-link{
     background-color: #686963;
 }
 
+#title, #desc {
+  width: calc(100% - 20px);
+}
+
 a {
   color: white;
   font-size:2em;
