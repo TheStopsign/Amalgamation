@@ -1,6 +1,12 @@
 <?php
-session_start();
- $casUser = strtolower($_SESSION['casLogin']);
+  session_start();
+  require_once '../vendor/jasig/phpcas/CAS.php';
+  phpCAS::setDebug();
+  phpCAS::setVerbose(true);
+  phpCAS::client(CAS_VERSION_3_0, 'cas-auth.rpi.edu', 443, '/cas');
+  phpCAS::setNoCasServerValidation();
+  phpCAS::forceAuthentication();
+  $casUser = strtolower($_SESSION['casLogin']) ? strtolower($_SESSION['casLogin']) : strtolower(phpCAS::getUser());
 ?>
 <!doctype html>
 
