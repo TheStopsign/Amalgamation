@@ -66,26 +66,23 @@
 	}
 ?>
 <!doctype html>
-
 <html lang="en">
-
-<head>
-  <title>Dashboard - amalgamation</title>
-  <link href="../resources/style_dashboard.css" rel="stylesheet" />
-  <link href="../resources/style.css" rel="stylesheet" />
-  <meta charset="UTF-8">
-  <!-- Icon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="../resources/images/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="../resources/images/favicons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="../resources/images/favicons/favicon-16x16.png">
-  <link rel="manifest" href="../resources/images/favicons/site.webmanifest">
-  <link rel="mask-icon" href="../resources/images/favicons/safari-pinned-tab.svg" color="#4c3549">
-  <link rel="shortcut icon" href="../resources/images/favicons/favicon.ico">
-  <meta name="msapplication-TileColor" content="#9f00a7">
-  <meta name="msapplication-config" content="../resources/images/favicons/browserconfig.xml">
-  <meta name="theme-color" content="#4c3549">
-</head>
-
+	<head>
+		<title>Dashboard - amalgamation</title>
+		<link href="../resources/style_dashboard.css" rel="stylesheet" />
+		<link href="../resources/style.css" rel="stylesheet" />
+		<meta charset="UTF-8">
+		<!-- Icon -->
+		<link rel="apple-touch-icon" sizes="180x180" href="../resources/images/favicons/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="../resources/images/favicons/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="../resources/images/favicons/favicon-16x16.png">
+		<link rel="manifest" href="../resources/images/favicons/site.webmanifest">
+		<link rel="mask-icon" href="../resources/images/favicons/safari-pinned-tab.svg" color="#4c3549">
+		<link rel="shortcut icon" href="../resources/images/favicons/favicon.ico">
+		<meta name="msapplication-TileColor" content="#9f00a7">
+		<meta name="msapplication-config" content="../resources/images/favicons/browserconfig.xml">
+		<meta name="theme-color" content="#4c3549">
+	</head>
 <body>
   <header>
     <a href="index.php"><img class="logo" src=../resources/images/logo1.png alt="amalgamation logo" width="200" height="50"></a>
@@ -123,8 +120,7 @@
 
       if( isset($_POST['removeUser']) ) {
 			$removeUser = $_POST['userName'];
-			$projID = $_POST['shareNumber'];
-		  
+			$projID = $_POST['shareNumber'];  
 
 			$removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
 			mysqli_query($conn, $removeQuery);
@@ -182,5 +178,4 @@
     <a href="https://github.com/TheStopsign/Tux" target="_blank"><img alt="Github Octocat" src="../resources/images/Octocat.png"/></a>
   </footer>
 </body>
-
 </html>
