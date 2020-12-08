@@ -122,27 +122,17 @@
       }
 
       if( isset($_POST['removeUser']) ) {
-        $removeUser = $_POST['userName'];
-		  $projID = $_POST['shareNumber'];
+			$removeUser = $_POST['userName'];
+			$projID = $_POST['shareNumber'];
 		  
-		  $vQuery = "SELECT * FROM amalgamation.permissions WHERE ProjectID = $projID";
-		  $flag = false;
-
-		  $results = mysqli_query($conn, $vQuery);
-		  while($row = $results->fetch_assoc()) {
-			  if ($row['rcs'] == $removeUser) {
-				  $flag = true;
-			  }
-		  }
-
-		  if (!$flag) {
-			echo "<h3>No user with that RCS found</h3>";
-		  } else {
 
 			$removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
-			$removeResult = mysqli_query($conn, $removeQuery);
-			echo"<h3>Edit permissions removed from $removeUser</h3>";
-		  }
+			mysqli_query($conn, $removeQuery);
+			if (mysqli_affected_rows($conn) == 0) {
+				echo "<h3>No user with RCS ID: $removeUser found</h3>";
+			} else {
+				echo"<h3>Edit permissions removed from $removeUser</h3>";
+			}		  
 		}
 		
 		while($row = $projectResults->fetch_assoc()) {
