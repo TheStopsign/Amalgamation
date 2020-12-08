@@ -103,19 +103,9 @@
         $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
         $removeResult = mysqli_query($conn, $removeQuery);
         echo"<h3>Edit permissions removed from $removeUser</h3>";
-        //this is probably insecure and definitely unsanitized
       }
     ?>
 
-    <div class="custom-select" style="width:200px;">
-      <label for="sortby">Sort By</label>
-      <select name="Sort By" id="sortby">
-        <option value="name_up">Name ↑</option>
-        <option value="name_down">Name ↓</option>
-        <option value="edited_up">Last Edited ↑</option>
-        <option value="edited_down">Last Edited ↓</option>
-      </select>
-    </div>
     <br>
 
     <?php
@@ -145,8 +135,8 @@
 				</li>
 			  </ul>
 
-        <div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!
-        </div>
+			 	<div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!
+       			 </div>
 			</div>
 
 		<div id=\"myModal".$x."\" class=\"modal\">
