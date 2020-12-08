@@ -23,6 +23,19 @@
 	 die("Connection failed " . $conn->connect_error);
 	}
 
+  $doodleID = htmlspecialchars($_GET["id"]);
+  $permissions = "SELECT * FROM amalgamation.permissions WHERE projectID = $doodleID AND (rcs = '$rcs' OR rcs = null) AND (perm = 'owner' OR perm = 'edit' OR perm = 'view')";
+  $permissionResults = mysqli_query($conn, $permissions);
+  $canEdit = false;
+  $canView = false;
+  if($row = $permissionResults->fetch_assoc()) {
+    if($row['perm'] == 'edit' || $row['perm'] == 'owner' || $canEdit) {
+      $canEdit = true;
+    }
+    if($row['perm'] == 'view' || $canEdit || $canView) {
+      $canView = true;
+    }
+  }
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +78,14 @@
       });
 
       const doodleID = (new URL(window.location.href)).searchParams.get("id")
+
+      const canEdit = "<?php echo $canEdit;?>"
+      const canView = "<?php echo $canView;?>"
+
+      if(!canView) {
+        alert("Invalid Permissions")
+        location.href="./index.php"
+      }
 
       const usersConnected = document.getElementById("users-connected")
 
@@ -118,10 +139,14 @@
         }
       });
 
-      lc.on('shapeSave',function(args) {
-        sock.emit("draw",{rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId});
-        addToHistory({rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId})
-      })
+      if(canEdit) {
+        lc.on('shapeSave',function(args) {
+          sock.emit("draw",{rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId});
+          addToHistory({rcs: rcs, shape: LC.shapeToJSON(args.shape), previousShapeId: args.previousShapeId})
+        })
+      } else {
+        alert("Any changes you make to the doodle will not be shown to other users.")
+      }
     })
   </script>
 </head>
