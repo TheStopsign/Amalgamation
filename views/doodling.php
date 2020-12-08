@@ -2,6 +2,13 @@
 <?php
 
   session_start();
+  require_once '../vendor/jasig/phpcas/CAS.php';
+  phpCAS::setDebug();
+  phpCAS::setVerbose(true);
+  phpCAS::client(CAS_VERSION_3_0, 'cas-auth.rpi.edu', 443, '/cas');
+  phpCAS::setNoCasServerValidation();
+  phpCAS::forceAuthentication();
+  $rcs = strtolower($_SESSION['casLogin']) ? strtolower($_SESSION['casLogin']) : strtolower(phpCAS::getUser());
 
   $servername = "localhost";
 	$username = "root";
@@ -16,12 +23,6 @@
 	 die("Connection failed " . $conn->connect_error);
 	}
 
-	$rcs = strtolower($_SESSION['casLogin']); //hard coded for now needs integration with login
-  // echo strtolower($rcs);
-	// $users = "SELECT * FROM amalgamation.users WHERE users.rcs = " . strtolower($rcs);
-	// $userResults = mysqli_query($conn, $users);
-
-  // $myUser = $userResults->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
