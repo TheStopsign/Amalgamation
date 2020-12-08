@@ -125,7 +125,7 @@
 			$removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
 			mysqli_query($conn, $removeQuery);
 			if (mysqli_affected_rows($conn) == 0) {
-				echo "<h3>No user with RCS ID: $removeUser found</h3>";
+				echo "<h3>No user with RCS ID: $removeUser to remove</h3>";
 			} else {
 				echo"<h3>Edit permissions removed from $removeUser</h3>";
 			}		  
