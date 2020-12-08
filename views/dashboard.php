@@ -1,12 +1,69 @@
 <?php
-  session_start();
-  require_once '../vendor/jasig/phpcas/CAS.php';
-  phpCAS::setDebug();
-  phpCAS::setVerbose(true);
-  phpCAS::client(CAS_VERSION_3_0, 'cas-auth.rpi.edu', 443, '/cas');
-  phpCAS::setNoCasServerValidation();
-  phpCAS::forceAuthentication();
-  $casUser = strtolower($_SESSION['casLogin']) ? strtolower($_SESSION['casLogin']) : strtolower(phpCAS::getUser());
+	session_start();
+	require_once '../vendor/jasig/phpcas/CAS.php';
+	phpCAS::setDebug();
+	phpCAS::setVerbose(true);
+	phpCAS::client(CAS_VERSION_3_0, 'cas-auth.rpi.edu', 443, '/cas');
+	phpCAS::setNoCasServerValidation();
+	phpCAS::forceAuthentication();
+	$casUser = strtolower($_SESSION['casLogin']) ? strtolower($_SESSION['casLogin']) : strtolower(phpCAS::getUser());
+
+	$servername = "localhost";
+	$username = "root";
+	$password = "";
+	$dbname = "amalgamation";
+
+	// Create connection
+	global $conn;
+	$conn = mysqli_connect($servername, $username, $password);
+	// Check connection
+	if (mysqli_connect_errno()) {
+	 die("Connection failed " . $conn->connect_error);
+	}
+
+	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
+
+	$userNameResults = mysqli_query($conn, $userName);
+	if(mysqli_num_rows($userNameResults)==0){
+		$newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
+		$addUser = mysqli_query($conn, $newUser);
+	}
+
+
+	if(isset($_POST['title']) and $_POST['title'] != ""){
+		$name = $_POST["title"];
+		$desc = $_POST["desc"];
+		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
+		$success = mysqli_query($conn, $newProj);
+		$newID = $conn->insert_id;
+
+		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
+    	$addPerm = mysqli_query($conn, $newPerm);
+	}
+
+	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
+		ON projects.projectID = permissions.projectID
+		WHERE permissions.rcs = '$casUser';";
+
+
+	$projectResults = mysqli_query($conn, $projects);
+
+	$permissions = "SELECT * FROM amalgamation.permissions WHERE
+		projectID = 4 AND (perm = 'owner' OR perm = 'edit')";
+	$permitResults = mysqli_query($conn, $permissions);
+
+	function modelContent($num) {
+
+		global $conn;
+		  $permissions = "SELECT * FROM amalgamation.permissions WHERE
+			projectID = $num AND (perm = 'owner' OR perm = 'edit')";
+		  $permitResults = mysqli_query($conn, $permissions);
+		  $final = "";
+		  while($row = $permitResults->fetch_assoc()) {
+			  $final .= "<p>". $row["rcs"] ."  ". $row["perm"] ."</p>";
+		  }
+		  return $final;
+	}
 ?>
 <!doctype html>
 
@@ -27,53 +84,6 @@
   <meta name="msapplication-TileColor" content="#9f00a7">
   <meta name="msapplication-config" content="../resources/images/favicons/browserconfig.xml">
   <meta name="theme-color" content="#4c3549">
-
-  <?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$dbname = "amalgamation";
-
-	// Create connection
-	global $conn;
-	$conn = mysqli_connect($servername, $username, $password);
-	// Check connection
-	if (mysqli_connect_errno()) {
-	 die("Connection failed " . $conn->connect_error);
-	}
-
-	$userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
-
-	$userNameResults = mysqli_query($conn, $userName);
-  if(mysqli_num_rows($userNameResults)==0){
-    $newUser = "INSERT INTO amalgamation.users (rcs) VALUES('$casUser')";
-    $addUser = mysqli_query($conn, $newUser);
-  }
-
-
-	if(isset($_POST['title']) and $_POST['title'] != ""){
-		$name = $_POST["title"];
-		$desc = $_POST["desc"];
-		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
-		$success = mysqli_query($conn, $newProj);
-		$newID = $conn->insert_id;
-
-		$newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
-    $addPerm = mysqli_query($conn, $newPerm);
-	}
-
-	$projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
-		ON projects.projectID = permissions.projectID
-		WHERE permissions.rcs = '$casUser';";
-
-
-	$projectResults = mysqli_query($conn, $projects);
-
-	$permissions = "SELECT * FROM amalgamation.permissions WHERE
-		projectID = 4 AND (perm = 'owner' OR perm = 'edit')";
-	$permitResults = mysqli_query($conn, $permissions);
-
-  ?>
 </head>
 
 <body>
@@ -86,43 +96,55 @@
 
   <div class="main-body">
     <?php
-  		//$myName = $userNameResults->fetch_assoc();
-  		echo "<h1> Hello, ". $casUser ."</h1>";
-      if(isset($_POST['addUser']) and $_POST['addUser'] != ""){
-        $shareUser = $_POST['addUser'];
-        $projID = $_POST['shareNumber'];
-        //echo "<script>alert('$shareUser' . '$projID');</script>";
-        $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
-        mysqli_query($conn, $shareQuery);
-        echo"<h3>Project Shared with $shareUser</h3>";
-      }
+		echo "<h1> Hello, ". $casUser ."</h1>";
 
-      if(isset($_POST['removeUser']) and $_POST['removeUser'] != ""){
-        $removeUser = $_POST['removeUser'];
-        $projID = $_POST['shareNumber'];
-        $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
-        $removeResult = mysqli_query($conn, $removeQuery);
-        echo"<h3>Edit permissions removed from $removeUser</h3>";
-      }
-    ?>
+      if( isset($_POST['addUser']) ){
+        $shareUser = $_POST['userName'];
+		  $projID = $_POST['shareNumber'];
+		  
+		  $vQuery = "SELECT * FROM amalgamation.permissions WHERE ProjectID = $projID";
+		  $flag = false;
 
-    <br>
-
-    <?php
-        function modelContent($num) {
-
-			global $conn;
-			  $permissions = "SELECT * FROM amalgamation.permissions WHERE
-				projectID = $num AND (perm = 'owner' OR perm = 'edit')";
-			  $permitResults = mysqli_query($conn, $permissions);
-			  $final = "";
-			  while($row = $permitResults->fetch_assoc()) {
-				  $final .= "<p>". $row["rcs"] ."  ". $row["perm"] ."</p>";
+		  $results = mysqli_query($conn, $vQuery);
+		  while($row = $results->fetch_assoc()) {
+			  if ($row['rcs'] == $shareUser) {
+				  $flag = true;
 			  }
-			  return $final;
+		  }
+		  if (!$flag) {
+			$shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
+			mysqli_query($conn, $shareQuery);
+			echo"<h3>Project Shared with $shareUser</h3>";
+		  }
+		  else {
+			  echo "<h3>Project already shared with $shareUser</h3>";
+		  }
+      }
+
+      if( isset($_POST['removeUser']) ) {
+        $removeUser = $_POST['userName'];
+		  $projID = $_POST['shareNumber'];
+		  
+		  $vQuery = "SELECT * FROM amalgamation.permissions WHERE ProjectID = $projID";
+		  $flag = false;
+
+		  $results = mysqli_query($conn, $vQuery);
+		  while($row = $results->fetch_assoc()) {
+			  if ($row['rcs'] == $removeUser) {
+				  $flag = true;
+			  }
+		  }
+
+		  if (!$flag) {
+			echo "<h3>No user with that RCS found</h3>";
+		  } else {
+
+			$removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
+			$removeResult = mysqli_query($conn, $removeQuery);
+			echo"<h3>Edit permissions removed from $removeUser</h3>";
+		  }
 		}
-
-
+		
 		while($row = $projectResults->fetch_assoc()) {
           $x = $row["ProjectID"];
 		  echo "
@@ -143,27 +165,18 @@
 
 			<!-- Modal content -->
 			<div class=\"modal-content\">
-			  <button onclick = \"document.getElementById('myModal".$x."').style.display='none'\" type=\"button\" class = \"close\">X</button>
+			  <a class='close' onclick=\"document.getElementById('myModal".$x."').style.display='none'\">x</a>
 			  ". modelContent($x) ."
         <form action=\"../views/dashboard.php\" method = \"POST\">
-   	        <input type=\"text\" id=\"addUser\" name=\"addUser\" placeholder='RCS here'>
+				  <input type=\"text\" id=\"userName\" name=\"userName\" placeholder='RCS here' required>
    	        <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value = $x>
-   	        <input type=\"submit\" value=\"Add User\">
-   	        <input type=\"text\" id=\"removeUser\" name=\"removeUser\">
-   	        <input type=\"submit\" value=\"Remove User\">
+   	        <button type='submit' name='addUser'>Add User</button>
+   	        <button type='submit' name='removeUser'>Remove User</button>
    	      <form>
 			</div>
-
-		  </div>
-
-
-			";
-
-
+		  </div>";
         }
-
       ?>
-
     <div class="add-window">
       <h3 class="centered"> Add Project </h3>
 	  <div class="centered"><form action="../views/dashboard.php" method = "POST">
@@ -172,17 +185,12 @@
 		  <input type="submit" value="Submit">
 		</form>
 		</div>
-
     </div>
   </div>
-
-
-
   <footer>
     <h2 id="teamTux">&copy; Team Tux</h2>
     <a href="https://github.com/TheStopsign/Tux" target="_blank"><img alt="Github Octocat" src="../resources/images/Octocat.png"/></a>
   </footer>
-
 </body>
 
 </html>

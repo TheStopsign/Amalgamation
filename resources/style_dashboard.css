@@ -8,6 +8,10 @@ body{
     background-color: #C4C4C4;
 }
 
+#userName {
+  margin-bottom: 15px;
+}
+
 .centered{
     text-align: center;
 }
@@ -173,8 +177,7 @@ nav:hover{
   .close {
     color: #aaa;
     float: inline-end;
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 1.5rem;
   }
 
   /* Buttons on dashboard for project */
