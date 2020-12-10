@@ -31,8 +31,8 @@
 
 
 	if(isset($_POST['title']) and $_POST['title'] != ""){
-		$name = $_POST["title"];
-		$desc = $_POST["desc"];
+		$name = $conn->real_escape_string($_POST["title"]);
+		$desc = $conn->real_escape_string($_POST["desc"]);
 		$newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
 		$success = mysqli_query($conn, $newProj);
 		$newID = $conn->insert_id;
@@ -96,8 +96,8 @@
 		echo "<h1> Hello, ". $casUser ."</h1>";
 
       if( isset($_POST['addUser']) ){
-        $shareUser = $_POST['userName'];
-		  $projID = $_POST['shareNumber'];
+        $shareUser = $conn->real_escape_string($_POST['userName']);
+        $projID = $conn->real_escape_string($_POST['shareNumber']);
 		  
 		  $vQuery = "SELECT * FROM amalgamation.permissions WHERE ProjectID = $projID";
 		  $flag = false;
@@ -119,8 +119,8 @@
       }
 
       if( isset($_POST['removeUser']) ) {
-			$removeUser = $_POST['userName'];
-			$projID = $_POST['shareNumber'];  
+			$removeUser = $conn->real_escape_string($_POST['userName']);
+			$projID = $conn->real_escape_string($_POST['shareNumber']);  
 
 			$removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
 			mysqli_query($conn, $removeQuery);
@@ -154,7 +154,7 @@
 			  <a class='close' onclick=\"document.getElementById('myModal".$x."').style.display='none'\">x</a>
 			  ". modelContent($x) ."
         <form action=\"../views/dashboard.php\" method = \"POST\">
-				  <input type=\"text\" id=\"userName\" name=\"userName\" placeholder='RCS here' required>
+				  <input type=\"text\" id=\"userName\" name=\"userName\" placeholder='RCS here'><br>
    	        <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value = $x>
    	        <button type='submit' name='addUser'>Add User</button>
    	        <button type='submit' name='removeUser'>Remove User</button>
