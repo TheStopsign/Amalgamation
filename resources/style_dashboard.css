@@ -96,22 +96,24 @@ nav:hover{
     color: #121121;
     position:relative;
     cursor: pointer;
+    padding: 1rem;
 }
 
-.add-window{
- float: left;
-    margin-left: 20px;
-    margin-bottom: 50px;
-    background-color: #DDDDDD ;
-    box-shadow: 3px 8px #6c7a86;
-    border: 1px black;
-    border-radius: 10px;
-    min-height: 200px;
-    width: 15%;
-    min-width: 100px;
-    color: #121121;
-    position:relative;
-    cursor: pointer;
+#add-window{
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 50px;
+  background-color: #DDDDDD ;
+  box-shadow: 3px 8px #6c7a86;
+  border: 1px black;
+  border-radius: 10px;
+  min-height: 200px;
+  width: 15%;
+  min-width: 100px;
+  color: #121121;
+  position:relative;
+  cursor: pointer;
+  padding: 1rem;
 }
 
 .display-window:before{

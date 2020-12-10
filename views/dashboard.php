@@ -153,7 +153,7 @@
                ;
             }
          ?>
-         <div class="add-window">
+         <div id="add-window">
             <h3 class="centered"> Add Project </h3>
             <div class="centered">
                <form action="../views/dashboard.php" method="POST">
