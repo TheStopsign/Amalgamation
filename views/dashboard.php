@@ -158,7 +158,7 @@
             <div class="centered">
                <form action="../views/dashboard.php" method="POST">
                   <label for="title">Title:</label>
-                  <input type="text" id="title" name="title">
+                  <input type="text" id="title" name="title" required>
                   <label for="desc">Description:</label>
                   <input type="text" id="desc" name="desc">
                   <input type="submit" value="Submit">
