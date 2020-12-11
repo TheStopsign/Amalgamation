@@ -91,7 +91,7 @@
          <?php
             echo "<h1> Hello, ". $casUser ."</h1>";
             if( isset($_POST['addUser']) ) {
-               $shareUser = $conn->real_escape_string($_POST['userName']);
+               $shareUser = $conn->real_escape_string(strtolower($_POST['userName']));
                $projID = $conn->real_escape_string($_POST['shareNumber']);
             
                $vQuery = "SELECT * FROM amalgamation.permissions WHERE ProjectID = $projID";
@@ -103,27 +103,36 @@
                      $flag = true;
                   }
                }
-               if (!$flag) {
+
+               if ($shareUser == $casUser) {
+                  echo "<h2>Can't add yourself to your own project!</h2>";
+               }
+               else if (!$flag) {
                   $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
                   mysqli_query($conn, $shareQuery);
-                  echo"<h3>Project Shared with $shareUser</h3>";
+                  echo"<h2>Project Shared with $shareUser</h2>";
                }
                else {
-                  echo "<h3>Project already shared with $shareUser</h3>";
+                  echo "<h2>Project already shared with $shareUser</h2>";
                }
             }
 
             if( isset($_POST['removeUser']) ) {
-               $removeUser = $conn->real_escape_string($_POST['userName']);
-               $projID = $conn->real_escape_string($_POST['shareNumber']);  
+               $removeUser = $conn->real_escape_string(strtolower($_POST['userName']));
+               $projID = $conn->real_escape_string($_POST['shareNumber']);
 
-               $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
-               mysqli_query($conn, $removeQuery);
-               if (mysqli_affected_rows($conn) == 0) {
-                  echo "<h3>No user with RCS ID: $removeUser to remove</h3>";
-               } else {
-                  echo"<h3>Edit permissions removed from $removeUser</h3>";
-               }		  
+               if ($removeUser == $casUser) {
+                  echo "<h2>Can't remove yourself from the project!</h2>";
+               } 
+               else {
+                  $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
+                  mysqli_query($conn, $removeQuery);
+                  if (mysqli_affected_rows($conn) == 0) {
+                     echo "<h2>No user with RCS ID: $removeUser to remove</h2>";
+                  } else {
+                     echo"<h2>Edit permissions removed from $removeUser</h2>";
+                  }	
+               }	  
             }
          
             while($row = $projectResults->fetch_assoc()) {
