@@ -11,7 +11,7 @@ Multiple users can edit the doodles at the same time, making use of our drawing 
 Our login page links with CAS authentication to allow RPI students to create accounts easily.
 
 ### Dashboard
-The dashbaord integrates with the CAS login and serves data stored in our database. Projects the user owns and has shared with them are displayed. From here, the user can share projects, unshare projects, and add projects.
+The dashboard integrates with the CAS login using a PHP session, and serves data stored in our database. Projects the user owns and has shared with them are displayed, along with their level of access. From here, the user can share projects, unshare projects, and add or delete projects. For administrative purposes, and to allow restores, deleted projects are not truly deleted but their permissions are removed from that user.  
 
 The user can also open the project to open our live collaboration session.
 
