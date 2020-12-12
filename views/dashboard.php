@@ -21,6 +21,7 @@
       die("Connection failed " . $conn->connect_error);
    }
 
+   //determines if there is existing user, inserts into DB if not
    $userName = "SELECT * FROM amalgamation.users WHERE users.rcs = '$casUser'";
 
    $userNameResults = mysqli_query($conn, $userName);
@@ -29,17 +30,20 @@
 	   $addUser = mysqli_query($conn, $newUser);
    }
 
+   //checks if a new post has been submitted, if it has, adds to DB
    if(isset($_POST['title']) and $_POST['title'] != ""){
-	   $name = $conn->escape_string($_POST["title"]);
-	   $desc = $conn->escape_string($_POST["desc"]);
-	   $newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
-	   $success = mysqli_query($conn, $newProj);
-	   $newID = $conn->insert_id;
+      $name = $conn->escape_string($_POST["title"]);//real_escape_string helps defeat SQL injection
+      $desc = $conn->escape_string($_POST["desc"]);
 
-	   $newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
+      $newProj = "INSERT INTO amalgamation.projects (name, Description) VALUES ('$name','$desc')";
+      $success = mysqli_query($conn, $newProj);
+      $newID = $conn->insert_id;
+
+      $newPerm = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$newID','$casUser','owner')";
       $addPerm = mysqli_query($conn, $newPerm);
    }
 
+   //if a user presses Delete Project, remove it from their view
    if( isset($_POST['deleteProject']) ) {
      $removeUser = $conn->real_escape_string($_POST['userName']);
      $projID = $conn->real_escape_string($_POST['shareNumber']);
@@ -54,6 +58,7 @@
      }
 }
 
+   //display shared/owned projects on the dashboard
    $projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 	   ON projects.projectID = permissions.projectID
 	   WHERE permissions.rcs = '$casUser';";
@@ -63,6 +68,7 @@
    $permissions = "SELECT * FROM amalgamation.permissions WHERE projectID = 4 AND (perm = 'owner' OR perm = 'edit')";
    $permitResults = mysqli_query($conn, $permissions);
 
+   //creates the list of names and their permissions for the share modal
    function modelContent($num) {
 	   global $conn;
 	   $permissions = "SELECT * FROM amalgamation.permissions WHERE
@@ -103,7 +109,9 @@
 
       <div id="main-body">
          <?php
+	    //display user's RCS
             echo "<h1> Hello, ". $casUser ."</h1>";
+	    //"add user" functionality
             if( isset($_POST['addUser']) ) {
                $shareUser = $conn->real_escape_string(strtolower($_POST['userName']));
                $projID = $conn->real_escape_string($_POST['shareNumber']);
@@ -117,7 +125,7 @@
                      $flag = true;
                   }
                }
-
+		//basic error checking for displaying info after an add
                if ($shareUser == $casUser) {
                   echo "<h2>Can't add yourself to your own project!</h2>";
                }
@@ -130,7 +138,8 @@
                   echo "<h2>Project already shared with $shareUser</h2>";
                }
             }
-
+	    
+	    //"remove user" functionality
             if( isset($_POST['removeUser']) ) {
                $removeUser = $conn->real_escape_string(strtolower($_POST['userName']));
                $projID = $conn->real_escape_string($_POST['shareNumber']);
