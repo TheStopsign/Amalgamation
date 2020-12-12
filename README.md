@@ -7,6 +7,10 @@ Users create accounts linked to their rcs ID.
 They can then create projects and share them with others. 
 Multiple users can edit the doodles at the same time, making use of our drawing tools suite.
 
+### Prerequisites - SECONDARY NODEJS SERVER FOR WEBSOCKET CONNECTIONS
+NodeJS installed and 'npm install' command run in the root project directory
+Node server running by opening terminal, navigating into the /websockets directory, and running 'node server' (or 'nodemon server' if preferred).
+
 ### Login Page
 Our login page links with CAS authentication to allow RPI students to create accounts easily.
 
