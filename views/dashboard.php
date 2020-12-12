@@ -40,6 +40,20 @@
       $addPerm = mysqli_query($conn, $newPerm);
    }
 
+   if( isset($_POST['deleteProject']) ) {
+     $removeUser = $conn->real_escape_string($_POST['userName']);
+     $projID = $conn->real_escape_string($_POST['shareNumber']);
+     $removeQuery = "DELETE FROM amalgamation.permissions WHERE ProjectID = '$projID' AND rcs = '$casUser'";
+
+     mysqli_query($conn, $removeQuery);
+     if (mysqli_affected_rows($conn) == 0) {
+            echo "<h3>Error: Project could not be deleted</h3>";
+     } else {
+            echo"<h3>Project successfully deleted</h3>";
+            header("Refresh:0");
+     }
+}
+
    $projects = "SELECT * FROM amalgamation.projects INNER JOIN amalgamation.permissions
 	   ON projects.projectID = permissions.projectID
 	   WHERE permissions.rcs = '$casUser';";
@@ -87,13 +101,13 @@
       <section class="colorbar"></section>
       <br/>
 
-      <div class="main-body">
+      <div id="main-body">
          <?php
             echo "<h1> Hello, ". $casUser ."</h1>";
             if( isset($_POST['addUser']) ) {
-               $shareUser = $conn->real_escape_string($_POST['userName']);
+               $shareUser = $conn->real_escape_string(strtolower($_POST['userName']));
                $projID = $conn->real_escape_string($_POST['shareNumber']);
-            
+
                $vQuery = "SELECT * FROM amalgamation.permissions WHERE ProjectID = $projID";
                $flag = false;
 
@@ -103,54 +117,90 @@
                      $flag = true;
                   }
                }
-               if (!$flag) {
+
+               if ($shareUser == $casUser) {
+                  echo "<h2>Can't add yourself to your own project!</h2>";
+               }
+               else if (!$flag) {
                   $shareQuery = "INSERT INTO amalgamation.permissions (ProjectID, rcs, perm) VALUES ('$projID','$shareUser','edit')";
                   mysqli_query($conn, $shareQuery);
-                  echo"<h3>Project Shared with $shareUser</h3>";
+                  echo"<h2>Project Shared with $shareUser</h2>";
                }
                else {
-                  echo "<h3>Project already shared with $shareUser</h3>";
+                  echo "<h2>Project already shared with $shareUser</h2>";
                }
             }
 
             if( isset($_POST['removeUser']) ) {
-               $removeUser = $conn->real_escape_string($_POST['userName']);
-               $projID = $conn->real_escape_string($_POST['shareNumber']);  
+               $removeUser = $conn->real_escape_string(strtolower($_POST['userName']));
+               $projID = $conn->real_escape_string($_POST['shareNumber']);
 
-               $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
-               mysqli_query($conn, $removeQuery);
-               if (mysqli_affected_rows($conn) == 0) {
-                  echo "<h3>No user with RCS ID: $removeUser to remove</h3>";
-               } else {
-                  echo"<h3>Edit permissions removed from $removeUser</h3>";
-               }		  
+               if ($removeUser == $casUser) {
+                  echo "<h2>Can't remove yourself from the project!</h2>";
+               } 
+               else {
+                  $removeQuery = "DELETE FROM amalgamation.permissions WHERE rcs = '$removeUser' AND ProjectID = '$projID'";
+                  mysqli_query($conn, $removeQuery);
+                  if (mysqli_affected_rows($conn) == 0) {
+                     echo "<h2>No user with RCS ID: $removeUser to remove</h2>";
+                  } else {
+                     echo"<h2>Edit permissions removed from $removeUser</h2>";
+                  }	
+               }	  
             }
-         
+
             while($row = $projectResults->fetch_assoc()) {
                $x = $row["ProjectID"];
-               echo "
-                  <div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
-                     <h3  class=\"centered\">". $row["name"] ."</h3>
-                     <h4  class=\"centered\">Permissions: ". $row["perm"] ."</h4>
-                     <ul>
-                        <li>". $row["Description"] ."</li>
-                     </ul>
-                     <div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!</div>
-                  </div>
-                  <div id=\"myModal".$x."\" class=\"modal\">
-                     <!-- Modal content -->
-                     <div class=\"modal-content\">
-                        <a class='close' onclick=\"document.getElementById('myModal".$x."').style.display='none'\">x</a>
-                        ". modelContent($x) ."
-                        <form action=\"../views/dashboard.php\" method=\"POST\">
-                           <input type=\"text\" id=\"userName\" name=\"userName\" placeholder='RCS here' required>
-                           <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value=$x>
-                           <button type='submit' name='addUser'>Add User</button>
-                           <button type='submit' name='removeUser'>Remove User</button>
-                        </form>
+               if ($row['perm'] == "owner") {
+                  echo "
+                     <div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
+                        <h3  class=\"centered\">". $row["name"] ."</h3>
+                        <h4  class=\"centered\">Permissions: ". $row["perm"] ."</h4>
+                        <ul>
+                           <li>". $row["Description"] ."</li>
+                        </ul>
+                        <div onclick= \"document.getElementById('myModal".$x."').style.display='block'\" class = \"bottom-right\">Share!</div>
                      </div>
-                  </div>"
-               ;
+                     <div id=\"myModal".$x."\" class=\"modal\">
+                        <!-- Modal content -->
+                        <div class=\"modal-content\">
+                           <a class='close' onclick=\"document.getElementById('myModal".$x."').style.display='none'\">x</a>
+                           ". modelContent($x) ."
+                           <form action=\"../views/dashboard.php\" method=\"POST\">
+                              <input type=\"text\" id=\"userName\" name=\"userName\" placeholder='RCS here' ><br>
+                              <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value=$x>
+                              <button type='submit' name='addUser'>Add User</button>
+                              <button type='submit' name='removeUser'>Remove User</button>
+                              <button type='submit' name='deleteProject'>Delete Project</button>
+                           </form>
+                        </div>
+                     </div>"
+                  ;
+               } else {
+                  echo "
+                     <div ondblclick=\"location.href='doodling.php?id=". $row["ProjectID"] ."'\" class=\"display-window\">
+                        <h3  class=\"centered\">". $row["name"] ."</h3>
+                        <h4  class=\"centered\">Permissions: ". $row["perm"] ."</h4>
+                        <ul>
+                           <li>". $row["Description"] ."</li>
+                        </ul>
+                     </div>
+                     <div id=\"myModal".$x."\" class=\"modal\">
+                        <!-- Modal content -->
+                        <div class=\"modal-content\">
+                           <a class='close' onclick=\"document.getElementById('myModal".$x."').style.display='none'\">x</a>
+                           ". modelContent($x) ."
+                           <form action=\"../views/dashboard.php\" method=\"POST\">
+                              <input type=\"text\" id=\"userName\" name=\"userName\" placeholder='RCS here' ><br>
+                              <input type=\"text\" id='shareNumber' name ='shareNumber' style=\"display:none\" value=$x>
+                              <button type='submit' name='addUser'>Add User</button>
+                              <button type='submit' name='removeUser'>Remove User</button>
+                              <button type='submit' name='deleteProject'>Delete Project</button>
+                           </form>
+                        </div>
+                     </div>"
+                  ;
+               }
             }
          ?>
          <div id="add-window">
