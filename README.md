@@ -1,4 +1,4 @@
-# Team Tux
+# Amalgamation
 
 
 ## Overview
